@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý khuyến mãi - 2000 Nails Eyelash</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brown: #8B6F5E;
+    --brown-dark: #6B5246;
+    --brown-light: #C4A99A;
+    --brown-bg: #F5EDE8;
+    --sidebar-bg: #8B7167;
+    --sidebar-active: #7A5440;
+    --sidebar-text: #E8D5C8;
+    --white: #FFFFFF;
+    --text-dark: #2D1F1A;
+    --text-mid: #6B5246;
+    --text-light: #9E8078;
+    --border: #E0CEC8;
+    --green: #4CAF7D;
+    --green-bg: #E8F5EE;
+    --orange: #E8A87C;
+    --orange-bg: #FDF0E8;
+    --red: #E85C5C;
+    --red-bg: #FDEAEA;
+    --gray-bg: #F9F4F2;
+    --shadow: 0 2px 12px rgba(139,111,94,0.12);
+    --shadow-lg: 0 8px 32px rgba(139,111,94,0.18);
+    --accent: #BFA19A;
+  }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--gray-bg);
+    color: var(--text-dark);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR (giữ nguyên từ quản lý dịch vụ) ── */
+  .sidebar {
+    width: 200px; min-width: 200px;
+    background: #8B7167;
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0;
+    height: 100vh; z-index: 100;
+  }
+  .sidebar, .sidebar * { color: #FFFFFF !important; }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    min-height: 88px;
+  }
+  .logo-img {
+    width: 52px; height: 52px; object-fit: cover;
+    border-radius: 50%; background: #fff; flex-shrink: 0;
+  }
+  .logo-text { font-size: 12px; line-height: 1.3; }
+  .logo-text strong { display: block; font-size: 15px; font-weight: 700; }
+  .logo-text span { display: block; font-size: 12px; opacity: 0.9; }
+
+  .sidebar-nav {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: space-evenly; padding: 8px 0;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 18px; min-height: 58px;
+    font-size: 13px; cursor: pointer;
+    transition: background 0.18s;
+  }
+  .nav-item:hover { background: rgba(191,161,154,0.5); }
+ .nav-item.active {
+  background: #BFA19A;
+  font-weight: 600;
+  
+}
+.nav-item {
+  text-decoration: none;   /* ❌ bỏ gạch chân */
+  color: #FFFFFF;          /* giữ màu trắng */
+}
+  .nav-icon-img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+  .action-icon-img { width: 18px; height: 18px; object-fit: contain; }
+  .btn-view, .btn-edit, .btn-delete { background: transparent; border: 1px solid #eee; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 200px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--white); padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .page-title { font-size: 22px; font-weight: 700; color: var(--brown); }
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+  .user-info { text-align: right; font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+  .user-info strong { display: block; font-size: 13px; color: var(--text-dark); font-weight: 600; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--brown-light);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 15px;
+  }
+  .btn-logout {
+    background: #BFA19A; color: white; border: none;
+    padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: inherit; transition: background 0.18s;
+  }
+  .btn-logout:hover { background: var(--brown-dark); }
+
+  /* ── CONTENT ── */
+  .content { padding: 28px; flex: 1; }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    background: var(--white); border-radius: 12px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px; box-shadow: var(--shadow);
+  }
+  .search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  height: 48px;
+  padding-left: 50px; /* 👉 chừa chỗ cho icon */
+  padding-right: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--gray-bg);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;          /* 👉 nằm sát trái */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  color: var(--text-light);
+}
+
+.search-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+  .btn-create {
+    background: #BFA19A; color: white; border: none;
+    padding: 9px 20px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; gap: 6px; white-space: nowrap;
+    transition: background 0.18s, transform 0.1s;
+  }
+  .btn-create:hover { background: var(--brown-dark); transform: translateY(-1px); }
+
+  /* ── TABLE ── */
+  .table-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .table-header {
+    display: grid; grid-template-columns: 2fr 1.2fr 1.8fr 1fr;
+    padding: 13px 20px; background: #8B7167; color: white;
+    font-size: 13px; font-weight: 600;
+  }
+  .table-row {
+    display: grid; grid-template-columns: 2fr 1.2fr 1.8fr 1fr;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    align-items: center; transition: background 0.15s;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: var(--brown-bg); }
+
+  .promo-name { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
+  .promo-service { font-size: 12px; color: var(--text-light); }
+
+  .badge-value {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    background: var(--brown-bg); color: var(--brown);
+    border: 1px solid var(--brown-light);
+  }
+  .badge-value.money { background: #FFF8E8; color: #B8860B; border-color: #E8D090; }
+
+  .promo-dates { font-size: 13px; color: var(--text-dark); margin-bottom: 5px; }
+  .status-badge {
+    display: inline-block; padding: 3px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .status-active   { background: var(--green); color: white; }
+  .status-upcoming { background: var(--orange-bg); color: #C4681E; border: 1px solid var(--orange); }
+  .status-expired  { background: var(--red-bg); color: var(--red); border: 1px solid #F5BABA; }
+
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .action-btn {
+    width: 32px; height: 32px; border: none; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px; transition: transform 0.15s;
+  }
+  .action-btn:hover { transform: scale(1.15); }
+  .btn-view,
+.btn-edit,
+.btn-delete {
+  background: #FFFFFF;   /* hoặc transparent */
+}
+
+  /* ── OVERLAY ── */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(45,31,26,0.45);
+    z-index: 200; align-items: center; justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.open { display: flex; }
+
+  /* ── MODAL ── */
+  .modal {
+    background: white; border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    width: 90%; max-width: 520px;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform: translateY(30px) scale(0.97); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+  .modal-header {
+    background: #BFA19A; color: white;
+    padding: 16px 22px; font-size: 16px; font-weight: 700;
+    border-radius: 14px 14px 0 0;
+  }
+  .modal-body { padding: 22px; }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+  label .req { color: var(--red); }
+  input[type="text"], input[type="date"], input[type="number"], select, textarea {
+    width: 100%; padding: 9px 13px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-family: inherit;
+    color: var(--text-dark); background: white;
+    outline: none; transition: border-color 0.18s, box-shadow 0.18s;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--brown-light);
+    box-shadow: 0 0 0 3px rgba(196,169,154,0.2);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .form-footer { display: flex; gap: 12px; justify-content: flex-end; padding-top: 8px; }
+  .btn-cancel {
+    padding: 9px 22px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: white;
+    color: var(--text-mid); font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-cancel:hover { background: var(--gray-bg); }
+  .btn-save {
+    padding: 9px 22px; border-radius: 8px; border: none;
+    background: #BFA19A; color: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--brown-dark); }
+
+  /* ── DETAIL MODAL ── */
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .detail-item label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+  .detail-item .value { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+  .detail-item .value.highlight { color: var(--brown); font-size: 16px; }
+  .service-chip {
+    display: inline-flex; align-items: center;
+    background: var(--brown-bg); border-radius: 8px;
+    padding: 8px 14px; font-size: 13px;
+    color: var(--text-mid); border: 1px solid var(--border);
+  }
+  .condition-box {
+    background: var(--gray-bg); border-radius: 8px;
+    padding: 12px 14px; font-size: 13px;
+    color: var(--text-mid); border: 1px solid var(--border);
+  }
+
+  /* ── CONFIRM ── */
+  .confirm-modal { max-width: 380px; text-align: center; }
+  .confirm-icon { font-size: 44px; margin-bottom: 14px; }
+  .confirm-title { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 18px; line-height: 1.5; }
+  .confirm-footer { display: flex; gap: 12px; justify-content: center; }
+  .btn-danger {
+    padding: 9px 22px; border-radius: 8px; border: none;
+    background: var(--red); color: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-danger:hover { background: #c94b4b; }
+
+  /* ── SUCCESS MODAL ── */
+  .success-modal {
+  max-width: 560px;
+  text-align: center;
+  border-radius: 12px;
+}
+
+.success-body {
+  padding: 42px 34px 36px;
+}
+
+.success-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #9CC27D;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.success-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #A8847C;
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+
+.success-msg {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.45;
+  margin-bottom: 0;
+}
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; top: 24px; right: 24px;
+    background: white; border-radius: 12px;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    z-index: 999; min-width: 260px;
+    transform: translateX(120%);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    border-left: 4px solid var(--red);
+  }
+  .toast.show { transform: translateX(0); }
+  .toast-text strong { display: block; font-size: 14px; font-weight: 700; }
+  .toast-text span { font-size: 12px; color: var(--text-light); }
+
+  .empty-state { padding: 50px 20px; text-align: center; color: var(--text-light); font-size: 14px; }
+
+  /* disable style */
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR (giữ nguyên từ quản lý dịch vụ) -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="icon/logo.jpg" alt="2000 Nails Logo" class="logo-img">
+    <div class="logo-text">
+      <strong>2000</strong>
+      <span>Nails Eyelash</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+  <a class="nav-item" href="Quan_ly_DV.html">
+    <img src="icon/1_Quanlydichvu.png" class="nav-icon-img">
+    <span>Quản lý dịch vụ</span>
+  </a>
+
+  <a class="nav-item" href="Quan_ly_NV.html">
+    <img src="icon/2_Quanlynhanvien.png" class="nav-icon-img">
+    <span>Quản lý nhân viên</span>
+  </a>
+
+  <a class="nav-item " href="Quan_ly_KH.html">
+    <img src="icon/3_Quanlykhachhang.png" class="nav-icon-img">
+    <span>Quản lý khách hàng</span>
+  </a>
+
+  <a class="nav-item" href="Quan_ly_dat_lich.html">
+    <img src="icon/4_Quanlydatlich.png" class="nav-icon-img">
+    <span>Quản lý đặt lịch</span>
+  </a>
+
+  <a class="nav-item active" href="Quan_ly_KM.HTML">
+    <img src="icon/5_Quanlykhuyenmai.png" class="nav-icon-img">
+    <span>Quản lý khuyến mãi</span>
+  </a>
+
+  <a class="nav-item" href="Quan_Ly_Bao_Cao_QL.html">
+    <img src="icon/6_Quanlybaocao.png" class="nav-icon-img">
+    <span>Quản lý báo cáo</span>
+  </a>
+
+  <a class="nav-item" href="Quan_Ly_Ca_Lam_QL.html">
+    <img src="icon/7_Quanlycalam.png" class="nav-icon-img">
+    <span>Quản lý ca làm</span>
+  </a>
+
+  <a class="nav-item" href="Quan_Ly_Tai_Khoan_Ca_Nhan_QL.html">
+    <img src="icon/8. Quản lý tài khoản cá nhân.png" class="nav-icon-img">
+    <span>Quản lý tài khoản cá nhân</span>
+  </a>
+</nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <h1 class="page-title">Quản lý khuyến mãi</h1>
+    <div class="topbar-right">
+      <div class="user-info">
+        <span>Quản lý hệ thống</span>
+        <strong>Thu Thuỷ</strong>
+      </div>
+      <div class="avatar">T</div>
+      <button class="btn-logout">Đăng xuất</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+  <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên khuyến mãi..." oninput="filterPromos()">
+</div>
+      <button class="btn-create" onclick="openCreate()">＋ Tạo mới khuyến mãi</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>Tên chương trình</div>
+        <div>Giá trị / mã</div>
+        <div>Thời gian và trạng thái</div>
+        <div>Thao tác</div>
+      </div>
+      <div id="tableBody"></div>
+    </div>
+  </div>
+</main>
+
+<!-- CREATE / EDIT MODAL -->
+<div class="overlay" id="formOverlay" onclick="handleOC(event,'formOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header" id="formTitle">Tạo khuyến mãi mới</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Tên chương trình <span class="req">*</span></label>
+        <input type="text" id="f_name" placeholder="Nhập tên chương trình">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Dịch vụ áp dụng <span class="req">*</span></label>
+          <select id="f_service">
+            <option value="">-- Chọn dịch vụ --</option>
+            <option>Làm nail trọn gói</option>
+            <option>Gội đầu dưỡng sinh</option>
+            <option>Làm mi</option>
+            <option>Sơn gel</option>
+            <option>Nối mi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Hình thức khuyến mãi <span class="req">*</span></label>
+          <select id="f_type" onchange="updateValuePlaceholder()">
+            <option value="">-- Chọn hình thức --</option>
+            <option value="percent">Giảm theo %</option>
+            <option value="money">Giảm theo tiền</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Giá trị khuyến mãi <span class="req">*</span></label>
+          <input type="number" id="f_value" placeholder="Nhập giá trị" min="0">
+        </div>
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <input type="text" id="f_status" value="Sắp diễn ra" readonly style="background:var(--gray-bg);color:var(--text-light);">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ngày bắt đầu <span class="req">*</span></label>
+          <input type="date" id="f_start" onchange="autoStatus()">
+        </div>
+        <div class="form-group">
+          <label>Ngày kết thúc <span class="req">*</span></label>
+          <input type="date" id="f_end" onchange="autoStatus()">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Điều kiện áp dụng</label>
+        <textarea id="f_condition" placeholder="Nhập điều kiện áp dụng mã giảm giá"></textarea>
+      </div>
+      <div class="form-footer">
+        <button class="btn-cancel" onclick="closeModal('formOverlay')">Hủy</button>
+        <button class="btn-save" onclick="savePromo()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="detailOverlay" onclick="handleOC(event,'detailOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header" style="background:#BFA19A;">Chi tiết khuyến mãi</div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Tên chương trình</label>
+          <div class="value" id="d_name">—</div>
+        </div>
+        <div class="detail-item">
+          <label>Giá trị khuyến mãi</label>
+          <div class="value highlight" id="d_value">—</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Dịch vụ áp dụng</label>
+          <div class="service-chip" id="d_service">—</div>
+        </div>
+        <div class="detail-item">
+          <label>Hình thức</label>
+          <div class="value" id="d_type">—</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Ngày bắt đầu</label>
+          <div class="value" id="d_start">—</div>
+        </div>
+        <div class="detail-item">
+          <label>Ngày kết thúc</label>
+          <div class="value" id="d_end">—</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Trạng thái</label>
+        <div id="d_status_badge"></div>
+      </div>
+      <div class="form-group">
+        <label>Điều kiện áp dụng</label>
+        <div class="condition-box" id="d_condition">—</div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-save" onclick="closeModal('detailOverlay')">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="overlay" id="deleteOverlay" onclick="handleOC(event,'deleteOverlay')">
+  <div class="modal confirm-modal" onclick="event.stopPropagation()">
+    <div class="modal-body" style="padding:32px 28px;">
+      <div class="confirm-icon">⚠️</div>
+      <div class="confirm-title">Bạn có chắc chắn muốn xoá chương trình khuyến mãi này không?</div>
+      <div class="confirm-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteOverlay')">Huỷ</button>
+        <button class="btn-danger" onclick="confirmDelete()">Xác nhận xoá</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="overlay" id="successOverlay" onclick="handleOC(event,'successOverlay')">
+  <div class="modal success-modal" onclick="event.stopPropagation()">
+    <div class="success-body">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Thành công!</div>
+      <div class="success-msg" id="successMsg">Thao tác thành công.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ERROR TOAST -->
+<div class="toast" id="toast">
+  <span>❌</span>
+  <div class="toast-text">
+    <strong>Lỗi!</strong>
+    <span id="toastMsg">Vui lòng điền đầy đủ thông tin.</span>
+  </div>
+</div>
+
+<script>
+const statusMap = {
+  active:   { label:'Đang áp dụng', cls:'status-active' },
+  upcoming: { label:'Sắp diễn ra',  cls:'status-upcoming' },
+  expired:  { label:'Hết hạn',      cls:'status-expired' },
+};
+
+let promos = [
+  { id:1, name:'Chào xuân rực rỡ',   service:'Làm nail trọn gói',    type:'percent', value:20,    start:'2026-01-11', end:'2026-03-11', condition:'', status:'active' },
+  { id:2, name:'Tri ân khách hàng',  service:'Gội đầu dưỡng sinh',   type:'percent', value:15,    start:'2026-03-15', end:'2026-04-20', condition:'Áp dụng cho tất cả khách hàng đặt lịch trong tháng 4', status:'upcoming' },
+  { id:3, name:'Khuyến mãi 8/3',     service:'Làm mi',                type:'percent', value:20,    start:'2026-01-01', end:'2026-03-31', condition:'', status:'active' },
+  { id:4, name:'Mừng giáng sinh',    service:'Làm nail trọn gói',    type:'money',   value:50000, start:'2025-12-01', end:'2025-12-30', condition:'', status:'expired' },
+];
+let nextId = 5;
+let editId = null;
+let deleteId = null;
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+function fmtValue(p) {
+  return p.type === 'percent' ? p.value + '%' : Number(p.value).toLocaleString('vi') + 'đ';
+}
+function calcStatus(start, end) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const s = new Date(start), e = new Date(end);
+  if (e < now) return 'expired';
+  if (s > now) return 'upcoming';
+  return 'active';
+}
+
+function renderTable(list) {
+  const tb = document.getElementById('tableBody');
+  if (!list.length) { tb.innerHTML = '<div class="empty-state">Chưa có chương trình khuyến mãi nào.</div>'; return; }
+  tb.innerHTML = list.map(p => {
+    const st = statusMap[p.status] || statusMap.expired;
+    const isMoney = p.type === 'money';
+    const disableEdit   = p.status === 'expired'  ? 'disabled' : '';
+    const disableDelete = p.status === 'active'   ? 'disabled' : '';
+    return `
+    <div class="table-row">
+      <div>
+        <div class="promo-name">${p.name}</div>
+        <div class="promo-service">Dịch vụ: ${p.service}</div>
+      </div>
+      <div>
+        <span class="badge-value ${isMoney?'money':''}">${fmtValue(p)}</span>
+      </div>
+      <div>
+        <div class="promo-dates">${fmtDate(p.start)} - ${fmtDate(p.end)}</div>
+        <span class="status-badge ${st.cls}">${st.label}</span>
+      </div>
+      <div class="actions">
+        <button class="action-btn btn-view" onclick="openDetail(${p.id})" title="Xem chi tiết">
+          <img src="icon/9_iconconmat.png" alt="Xem" class="action-icon-img">
+        </button>
+        <button class="action-btn btn-edit" onclick="openEdit(${p.id})" title="Cập nhật" ${disableEdit}>
+          <img src="icon/10_iconbutchi.png" alt="Sửa" class="action-icon-img">
+        </button>
+        <button class="action-btn btn-delete" onclick="openDelete(${p.id})" title="Xoá" ${disableDelete}>
+          <img src="icon/11_iconthungrac.png" alt="Xóa" class="action-icon-img">
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterPromos() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderTable(promos.filter(p => p.name.toLowerCase().includes(q) || p.service.toLowerCase().includes(q)));
+}
+
+/* ── DETAIL ── */
+function openDetail(id) {
+  const p = promos.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('d_name').textContent    = p.name;
+  document.getElementById('d_value').textContent   = fmtValue(p);
+  document.getElementById('d_service').textContent = p.service;
+  document.getElementById('d_type').textContent    = p.type === 'percent' ? 'Giảm theo %' : 'Giảm theo tiền';
+  document.getElementById('d_start').textContent   = fmtDate(p.start);
+  document.getElementById('d_end').textContent     = fmtDate(p.end);
+  const st = statusMap[p.status];
+  document.getElementById('d_status_badge').innerHTML = `<span class="status-badge ${st.cls}" style="font-size:13px;padding:5px 16px">${st.label}</span>`;
+  document.getElementById('d_condition').textContent  = p.condition || 'Không có điều kiện';
+  openModal('detailOverlay');
+}
+
+/* ── CREATE ── */
+function openCreate() {
+  editId = null;
+  document.getElementById('formTitle').textContent = 'Tạo khuyến mãi mới';
+  ['f_name','f_service','f_type','f_value','f_start','f_end','f_condition'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f_status').value = 'Sắp diễn ra';
+  openModal('formOverlay');
+}
+
+/* ── EDIT ── */
+function openEdit(id) {
+  const p = promos.find(x=>x.id===id);
+  if (!p) return;
+  editId = id;
+  document.getElementById('formTitle').textContent = 'Cập nhật khuyến mãi';
+  document.getElementById('f_name').value      = p.name;
+  document.getElementById('f_service').value   = p.service;
+  document.getElementById('f_type').value      = p.type;
+  document.getElementById('f_value').value     = p.value;
+  document.getElementById('f_start').value     = p.start;
+  document.getElementById('f_end').value       = p.end;
+  document.getElementById('f_condition').value = p.condition;
+  autoStatus();
+  openModal('formOverlay');
+}
+
+function autoStatus() {
+  const s = document.getElementById('f_start').value;
+  const e = document.getElementById('f_end').value;
+  if (s && e) document.getElementById('f_status').value = statusMap[calcStatus(s,e)].label;
+}
+function updateValuePlaceholder() {
+  const t = document.getElementById('f_type').value;
+  document.getElementById('f_value').placeholder = t === 'money' ? 'Nhập số tiền (đ)' : 'Nhập % giảm';
+}
+
+function savePromo() {
+  const name    = document.getElementById('f_name').value.trim();
+  const service = document.getElementById('f_service').value;
+  const type    = document.getElementById('f_type').value;
+  const value   = parseFloat(document.getElementById('f_value').value);
+  const start   = document.getElementById('f_start').value;
+  const end     = document.getElementById('f_end').value;
+  const condition = document.getElementById('f_condition').value.trim();
+
+  if (!name || !service || !type || isNaN(value) || !start || !end) {
+    showToast('Vui lòng điền đầy đủ thông tin bắt buộc.'); return;
+  }
+  if (value < 0) { showToast('Giá trị khuyến mãi phải lớn hơn 0.'); return; }
+  if (new Date(end) <= new Date(start)) { showToast('Ngày kết thúc phải sau ngày bắt đầu.'); return; }
+
+  const status = calcStatus(start, end);
+
+  if (editId) {
+    const idx = promos.findIndex(x=>x.id===editId);
+    promos[idx] = { id:editId, name, service, type, value, start, end, condition, status };
+    closeModal('formOverlay');
+    filterPromos();
+    showSuccess('Dữ liệu khuyến mãi đã được cập nhật thành công.');
+  } else {
+    if (promos.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+      showToast('Tên chương trình khuyến mãi đã tồn tại.'); return;
+    }
+    promos.push({ id:nextId++, name, service, type, value, start, end, condition, status });
+    closeModal('formOverlay');
+    filterPromos();
+    showSuccess('Tạo khuyến mãi mới thành công.');
+  }
+}
+
+/* ── DELETE ── */
+function openDelete(id) {
+  const p = promos.find(x=>x.id===id);
+  if (p && p.status === 'active') { showToast('Không thể xoá khuyến mãi đang áp dụng.'); return; }
+  deleteId = id;
+  openModal('deleteOverlay');
+}
+function confirmDelete() {
+  promos = promos.filter(x=>x.id !== deleteId);
+  deleteId = null;
+  closeModal('deleteOverlay');
+  filterPromos();
+  showSuccess('Đã xoá chương trình khuyến mãi.');
+}
+
+/* ── HELPERS ── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function handleOC(e, id) { if (e.target.id === id) closeModal(id); }
+
+function showSuccess(msg) {
+  document.getElementById('successMsg').textContent = msg;
+  openModal('successOverlay');
+}
+function showToast(msg) {
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+const items = document.querySelectorAll('.nav-item');
+
+items.forEach(item => {
+  item.addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+
+/* ── INIT ── */
+renderTable(promos);
+</script>
+</body>
+</html>

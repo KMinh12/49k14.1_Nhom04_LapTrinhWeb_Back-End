@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý tài khoản - 2000 Nails Eyelash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Arimo:wght@700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* Font mặc định Arimo, Logo dùng Poppins */
+    body { font-family: 'Arimo', sans-serif; background-color: #F8F1EB; color: #4A4A4A; -webkit-font-smoothing: antialiased; }
+    .font-poppins { font-family: 'Poppins', sans-serif; }
+
+    .bg-sidebar { background-color: #8B7167; }
+    .nav-active { background-color: rgba(255, 255, 255, 0.15); }
+    
+    /* Panel & Input */
+    .info-panel { background-color: white; border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; }
+    /* Màu khung Panel giữa mã #BFA19A */
+    .header-panel { background-color: #BFA19A; color: white; padding: 1rem 1.5rem; font-size: 1.5rem; font-weight: bold; }
+    
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #DEDEDE;
+      border-radius: 0.75rem;
+      outline: none;
+      transition: all 0.3s;
+      color: #000000; /* Thông tin hiển thị màu đen */
+    }
+    .input-field:focus { border-color: #BFA19A; box-shadow: 0 0 0 3px rgba(191, 161, 154, 0.2); }
+    
+    .label-text { font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block; }
+
+    /* Button nền màu #BFA19A */
+    .btn-custom { background-color: #BFA19A; color: white; font-weight: bold; transition: 0.3s; }
+    .btn-custom:hover { filter: brightness(0.9); transform: translateY(-1px); }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+  <aside class="w-72 bg-sidebar text-white flex flex-col flex-shrink-0 shadow-2xl">
+        <a href="Trang_Chu_QL.html" style="text-decoration: none; color: inherit;">
+          <div class="logo-section">
+              <img class="logo-circle" src="icon/logo.jpg" alt="">
+              <div class="logo-text">
+                  2000<br>Nails Eyelash
+              </div>
+          </div>
+        </a>
+
+        <hr class="sidebar-divider">
+        
+        <nav class="menu">
+            <a href="DatLich.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/12.Đặt lịch hẹn.png" alt=""></div>
+                Đặt lịch hẹn
+            </a>
+            <a href="LichHen.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/13. Lịch hẹn của tôi .png" alt=""></div>
+                Lịch hẹn của tôi
+            </a>
+            <a href="TaiKhoanKhach.html" class="menu-item active">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+  </aside>
+
+  <main class="flex-1 flex flex-col min-w-0">
+    <header class="h-20 bg-white flex items-center justify-between px-12 flex-shrink-0">
+      <h2 class="text-4xl font-bold" style="color: #8B6F47">Quản lý tài khoản cá nhân</h2>
+      <div class="flex items-center gap-8">
+        <div class="text-right">
+          <p class="text-[#5B5B5B] text-xl font-bold">Khách hàng</p>
+          <p class="font-bold text-[#5B5B5B] text-base leading-none mt-1">Trương Lan</p>
+        </div>
+        <img src="avatar.jpg" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+        <button onclick="window.location.href='Trangchu.html'" class="px-6 py-2.5 rounded-xl font-bold text-sm uppercase text-white transition hover:brightness-90" style="background-color: #BFA19A;">Đăng xuất</button>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-10 flex gap-10">
+      
+      <div class="flex-[2] info-panel h-fit">
+        <div class="header-panel">Thông tin chi tiết</div>
+        <div class="p-10">
+          <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+            <div>
+              <label class="label-text">Họ và tên</label>
+              <input type="text" value="Trương Lan" class="input-field">
+            </div>
+            <div>
+              <label class="label-text">Giới tính</label>
+              <input type="text" value="Nữ" class="input-field">
+            </div>
+            <div>
+              <label class="label-text">Mã khách hàng</label>
+              <input type="text" value="kh001" class="input-field bg-gray-50 cursor-not-allowed" readonly>
+            </div>
+            <div>
+              <label class="label-text">Email</label>
+              <input type="email" value="lan123@gmail.com" class="input-field">
+            </div>
+            <div>
+              <label class="label-text">Số điện thoại</label>
+              <input type="text" value="0812345678" class="input-field">
+            </div>
+            <div>
+              <label class="label-text">Ngày sinh</label>
+              <input type="text" value="15/03/1990" class="input-field">
+            </div>
+            <div class="col-span-2">
+              <label class="label-text">Địa chỉ</label>
+              <input type="text" value="03 Đường Nguyễn Văn Cừ , Quận hải Châu , TP.Đà Nẵng" class="input-field">
+            </div>
+          </div>
+          <button onclick="openUpdateInfoModal()" class="mt-10 px-10 py-3 btn-custom rounded-xl text-lg shadow-md">Cập nhật thông tin</button>
+        </div>
+      </div>
+
+      <div class="flex-1 info-panel h-fit">
+        <div class="header-panel">Bảo mật</div>
+        <div class="p-8 space-y-6">
+          <div>
+            <label class="label-text">Tên tài khoản</label>
+            <input type="text" placeholder="Trương Lan" class="input-field bg-gray-50" disabled>
+          </div>
+          <div>
+            <label class="label-text">Mật khẩu</label>
+            <input type="password" placeholder="" class="input-field">
+          </div>
+          <button onclick="openPasswordModal()" class="w-full py-3 btn-custom rounded-xl text-lg shadow-md">Đổi mật khẩu</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="updateInfoModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeUpdateInfoModal()"></div>
+    <div class="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div class="header-panel text-center py-4">
+            <h2 class="text-white text-3xl font-bold uppercase tracking-widest">Cập nhật thông tin chi tiết</h2>
+        </div>
+
+        <div class="p-10 space-y-8 overflow-y-auto max-h-[80vh]">
+            <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+                <div>
+                    <label class="label-text font-bold">Họ và tên</label>
+                    <input type="text" value="Trương Lan" class="input-field border p-2 rounded-lg w-full">
+                </div>
+                <div>
+                    <label class="label-text font-bold">Giới tính</label>
+                    <input type="text" value="Nữ" class="input-field border p-2 rounded-lg w-full">
+                </div>
+                <div>
+                    <label class="label-text font-bold">Email</label>
+                    <input type="email" value="lan123@gmail.com" class="input-field border p-2 rounded-lg w-full">
+                </div>
+                <div>
+                    <label class="label-text font-bold">Số điện thoại</label>
+                    <input type="text" value="0812345678" class="input-field border p-2 rounded-lg w-full">
+                </div>
+                <div>
+                    <label class="label-text font-bold">Ngày sinh</label>
+                    <input type="text" value="15/03/1990" class="input-field border p-2 rounded-lg w-full">
+                </div>
+                <div class="col-span-2">
+                    <label class="label-text font-bold">Địa chỉ</label>
+                    <input type="text" value="03 Đường Nguyễn Văn Cừ, Quận Hải Châu, TP.Đà Nẵng" class="input-field border p-2 rounded-lg w-full">
+                </div>
+            </div>
+
+            <button onclick="handleInfoSuccess()" class="w-40 py-3 btn-custom text-white font-bold rounded-xl block mx-auto hover:brightness-90 transition shadow-md">Lưu</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="passwordModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closePasswordModal()"></div>
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl relative z-10 overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div class="py-4 text-center header-panel">
+            <h2 class="text-white text-2xl font-bold uppercase tracking-widest">Đổi mật khẩu</h2>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <div>
+                <label class="label-text font-bold">Mật khẩu hiện tại <span class="text-red-500">*</span></label>
+                <input type="password" placeholder="Nhập mật khẩu hiện tại" class="input-field border p-2 rounded-lg w-full">
+            </div>
+            
+            <div class="relative">
+                <label class="label-text font-bold">Mật khẩu mới <span class="text-red-500">*</span></label>
+                <input type="password" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" class="input-field border p-2 rounded-lg w-full pr-12">
+                <button class="absolute right-4 top-[38px] text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-eye-slash"></i>
+                </button>
+            </div>
+
+            <div class="relative">
+                <label class="label-text font-bold">Xác nhận mật khẩu <span class="text-red-500">*</span></label>
+                <input type="password" placeholder="Nhập lại mật khẩu mới" class="input-field border p-2 rounded-lg w-full pr-12">
+                <button class="absolute right-4 top-[38px] text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-eye-slash"></i>
+                </button>
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button onclick="closePasswordModal()" class="flex-1 py-3 border border-gray-300 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition">Huỷ</button>
+                <button onclick="handlePasswordSuccess()" class="flex-1 py-3 btn-custom text-white font-bold rounded-xl hover:brightness-90 transition shadow-md">Đổi mật khẩu</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="globalSuccessModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
+    <div class="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl p-10 relative z-10 text-center animate-in fade-in zoom-in duration-300">
+        <div class="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <i class="fa-solid fa-check text-3xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-[#A2817A] mb-2">Thành công!</h3>
+        <p id="successMessage" class="font-medium" style="color: #000000;">Nội dung thông báo...</p>
+    </div>
+  </div>
+
+<script>
+    function openUpdateInfoModal() {
+        document.getElementById('updateInfoModal').classList.replace('hidden', 'flex');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeUpdateInfoModal() {
+        document.getElementById('updateInfoModal').classList.replace('flex', 'hidden');
+        document.body.style.overflow = 'auto';
+    }
+    function openPasswordModal() {
+        document.getElementById('passwordModal').classList.replace('hidden', 'flex');
+        document.body.style.overflow = 'hidden';
+    }
+    function closePasswordModal() {
+        document.getElementById('passwordModal').classList.replace('flex', 'hidden');
+        document.body.style.overflow = 'auto';
+    }
+    function showGlobalSuccess(message) {
+        const successModal = document.getElementById('globalSuccessModal');
+        document.getElementById('successMessage').innerText = message;
+        successModal.classList.replace('hidden', 'flex');
+        setTimeout(() => {
+            successModal.classList.replace('flex', 'hidden');
+            document.body.style.overflow = 'auto';
+        }, 2000);
+    }
+    function handleInfoSuccess() { closeUpdateInfoModal(); showGlobalSuccess("Cập nhật thông tin thành công."); }
+    function handlePasswordSuccess() { closePasswordModal(); showGlobalSuccess("Đổi mật khẩu thành công."); }
+</script>
+</body>
+</html>

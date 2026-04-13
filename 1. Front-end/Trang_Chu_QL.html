@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ - Quản Lý | 2000 Nails Eyelash</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arimo', sans-serif;
+        }
+
+        body {
+            background-color: #F5F0ED; /* Màu nền */
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR (THANH MENU LÊN TRÁI) --- */
+        .sidebar {
+            width: 260px;
+            background-color: #8B7167;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Đảm bảo sidebar cao hết màn hình */
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            padding: 25px 20px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            margin-right: 15px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .sidebar-divider {
+            border: 0;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Đã điều chỉnh CSS menu ở đây để hover và active tràn viền đẹp hơn */
+        .menu {
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Tự động chiếm lấy toàn bộ phần trống còn lại của sidebar */
+            padding: 10px 0; /* Khoảng cách đệm trên dưới */
+            justify-content: space-between; /* Đẩy các mục cách đều nhau từ trên xuống dưới */
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: background-color 0.2s;
+            /* Loại bỏ margin-bottom nếu có để space-between hoạt động chuẩn xác */
+            margin-bottom: 0; 
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Class hiển thị trạng thái đang chọn */
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Khung chứa icon */
+        .menu-icon {
+            width: 30px;   /* Giảm kích thước khung từ 24px xuống 20px */
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px; /* Tăng khoảng cách với chữ một chút cho thoáng */
+        }
+
+          /* Hình ảnh icon bên trong */
+          .menu-icon img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain; /* Đảm bảo icon không bị bóp méo */
+              display: block;
+          }
+
+        /* Tùy chỉnh icon SVG cho menu */
+        .menu-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: #5A463F; /* Nâu đậm */
+        }
+
+        /* --- MAIN CONTENT (NỘI DUNG CHÍNH) --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background-color: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .page-title {
+            color: #8B6F47; /* Màu chữ trang chủ */
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-right: 25px;
+            text-align: right;
+            color: #5B5B5B; /* Màu chữ Nhân viên / Tên */
+        }
+
+        .user-details {
+            margin-right: 12px;
+        }
+
+        .user-role {
+            font-size: 14px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 40px;
+            background-color: #E0E0E0;
+            margin-right: 25px;
+        }
+
+        .btn-logout {
+            background-color: #BFA19A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #a88c85;
+        }
+
+        /* DASHBOARD CONTENT */
+        .dashboard-body {
+            padding: 40px;
+        }
+
+        .welcome-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .greeting-small {
+            color: #BFA19A; /* Màu phụ */
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .greeting-large {
+            color: #8B7167; /* Màu Xin chào... */
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .greeting-date {
+            color: #BFA19A; /* Màu phụ */
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        .card-divider {
+            border: 0;
+            height: 1px;
+            background-color: #E5E5E5;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="Trang_Chu_QL.html" style="text-decoration: none; color: inherit;">
+          <div class="logo-section">
+              <img class="logo-circle" src="icon/logo.jpg" alt="">
+              <div class="logo-text">
+                  2000<br>Nails Eyelash
+              </div>
+          </div>
+        </a>
+
+        <hr class="sidebar-divider">
+        
+        <nav class="menu">
+            <a href="Quan_ly_DV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/1_Quanlydichvu.png" alt=""></div>
+                Quản lý dịch vụ
+            </a>
+            <a href="Quan_ly_NV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/2_Quanlynhanvien.png" alt=""></div>
+                Quản lý nhân viên
+            </a>
+            <a href="Quan_ly_KH.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/3_Quanlykhachhang.png" alt=""></div>
+                Quản lý khách hàng
+            </a>
+            <a href="Quan_ly_dat_lich.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/4_Quanlydatlich.png" alt=""></div>
+                Quản lý đặt lịch
+            </a>
+            <a href="Quan_ly_KM.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/5_Quanlykhuyenmai.png" alt=""></div>
+                Quản lý khuyến mãi
+            </a>
+            <a href="Quan_Ly_Bao_Cao_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/6_Quanlybaocao.png" alt=""></div>
+                Quản lý báo cáo
+            </a>
+            <a href="Quan_Ly_Ca_Lam_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/7_Quanlycalam.png" alt=""></div>
+                Quản lý ca làm
+            </a>
+            <a href="Quan_Ly_Tai_Khoan_Ca_Nhan_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="header">
+            <h1 class="page-title">Trang chủ</h1>
+            
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-details" style="text-align: right;">
+                        <span class="user-role">Quản lý hệ thống</span>
+                        <span class="user-name">Thu Thuý</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=68" alt="Avatar" class="avatar">
+                </div>
+                
+                <div class="header-divider"></div>
+                
+                <button class="btn-logout" onclick="window.location.href='Dang_Nhap.html'">Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            <div class="welcome-card">
+                <p class="greeting-small">Chào mừng trở lại</p>
+                <h2 class="greeting-large">Xin chào, Thu Thuý !</h2>
+                <p class="greeting-date">Hôm nay là Thứ Tư, 15/03/2026. Chúc bạn một ngày làm việc vui vẻ!</p>
+                <hr class="card-divider">
+            </div>
+        </div>
+        
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý khách hàng - 2000 Nails & Eyelash</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="Style.css">
+    <style>
+        /* Đảm bảo toàn bộ trang không có khoảng trắng thừa */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arimo', sans-serif;
+        }
+
+        body {
+            background-color: #F5F0ED;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            /* Ngăn cuộn trang chính, chỉ cuộn nội dung bên trong */
+        }
+
+        /* --- SIDEBAR SỬA ĐỔI --- */
+        .sidebar {
+            width: 260px;
+            background-color: #8B7167;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            /* Tràn hết chiều cao màn hình */
+            flex-shrink: 0;
+            /* Không cho sidebar bị co lại khi màn hình nhỏ */
+        }
+
+        /* Logo section giữ nguyên chiều cao */
+        .logo-section {
+            display: flex;
+            align-items: center;
+            padding: 25px 20px;
+            background-color: rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        /* MENU DÀN TRẢI ĐỀU */
+        .menu {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            /* Chiếm toàn bộ phần trống còn lại của sidebar */
+            justify-content: space-between;
+            /* Đẩy các mục cách đều nhau */
+            padding: 10px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 15px 20px;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            /* Cho phép cuộn phần nội dung nếu quá dài */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- DIV --- */
+
+        /* --- NỘI DUNG CHÍNH (MAIN) --- */
+        .content-body {
+            padding: 30px;
+            flex: 1;
+        }
+
+        /* Thanh tìm kiếm */
+
+        /* Bảng danh sách */
+        .table-container {
+            background-color: #FFFFFF;
+            border-radius: 0 0 15px 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #8B7167;
+            color: #FFFFFF;
+        }
+
+        th {
+            padding: 15px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #EEEEEE;
+            font-size: 14px;
+            color: #333;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .btn-icon img {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.2s;
+        }
+
+        .btn-icon:hover img {
+            transform: scale(1.1);
+        }
+
+        .content-container {
+            padding: 40px 40px 40px 40px;
+        }
+
+
+        .toolbar {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            outline: none;
+            background-color: #fcfcfc;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            opacity: 0.5;
+        }
+
+        /* --- CSS CHO POPUP ĐÁNH GIÁ (THEO ẢNH) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            /* Ẩn mặc định */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 550px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background-color: #C1A79E;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 450px;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+
+        .history-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .review-card {
+            background: #fdfdfd;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #8B7167;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .service-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .stars {
+            color: #FFA500;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            font-style: italic;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-close {
+            background-color: #C1A79E;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn-close:hover {
+            background-color: #8B7167;
+        }
+        .header {
+    height: 90px;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid #E5E5E5;
+    flex-shrink: 0;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #6F554B;
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.4;
+}
+
+.user-role {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+.user-name {
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.header-divider {
+    width: 1px;
+    height: 40px;
+    background-color: #DDD;
+}
+
+.btn-logout {
+    background-color: #C8AEA4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <a href="Trang_Chu_QL.html" style="text-decoration: none; color: inherit;">
+            <div class="logo-section">
+                <img class="logo-circle" src="icon/logo.jpg" alt="">
+                <div class="logo-text">
+                    2000<br>Nails Eyelash
+                </div>
+            </div>
+        </a>
+
+        <hr class="sidebar-divider">
+
+        <nav class="menu">
+            <a href="Quan_ly_DV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/1_Quanlydichvu.png" alt=""></div>
+                Quản lý dịch vụ
+            </a>
+            <a href="Quan_ly_NV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/2_Quanlynhanvien.png" alt=""></div>
+                Quản lý nhân viên
+            </a>
+            <a href="Quan_ly_KH.html" class="menu-item active">
+                <div class="menu-icon"><img src="icon/3_Quanlykhachhang.png" alt=""></div>
+                Quản lý khách hàng
+            </a>
+            <a href="Quan_ly_dat_lich.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/4_Quanlydatlich.png" alt=""></div>
+                Quản lý đặt lịch
+            </a>
+            <a href="Quan_ly_KM.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/5_Quanlykhuyenmai.png" alt=""></div>
+                Quản lý khuyến mãi
+            </a>
+            <a href="Quan_Ly_Bao_Cao_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/6_Quanlybaocao.png" alt=""></div>
+                Quản lý báo cáo
+            </a>
+            <a href="Quan_Ly_Ca_Lam_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/7_Quanlycalam.png" alt=""></div>
+                Quản lý ca làm
+            </a>
+            <a href="Quan_Ly_Tai_Khoan_Ca_Nhan_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">Quản lý khách hàng</h1>
+
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-details" style="text-align: right;">
+                        <span class="user-role">Quản lý hệ thống</span>
+                        <span class="user-name">Thu Thuý</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=68" alt="Avatar" class="avatar">
+                </div>
+                <div class="header-divider"></div>
+                <button class="btn-logout" onclick="window.location.href='Dang_Nhap.html'">Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="content-container">
+            <div class="toolbar">
+                <div class="search-box">
+                    <img src="icon/18_Timkiem.png" alt="Search" class="search-icon">
+                    <input type="text" id="searchInput" oninput="searchCustomer()"
+                        placeholder="Tìm kiếm theo tên hoặc mã nhân viên">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã KH</th>
+                            <th>Họ và tên KH</th>
+                            <th>SĐT</th>
+                            <th>Email</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Mật khẩu</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <tr>
+                            <td>KH001</td>
+                            <td>Trương Thị Lan</td>
+                            <td>0908431766</td>
+                            <td>lantruong@gmail.com</td>
+                            <td>LanTruong</td>
+                            <td>lan123@</td>
+                            <td class="actions">
+                                <button class="btn-icon"><img src="icon/9_iconconmat.png" alt="View"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>KH002</td>
+                            <td>Nguyễn Dương Phi</td>
+                            <td>0901886314</td>
+                            <td>ndphi@gmail.com</td>
+                            <td>PhiNguyen123</td>
+                            <td>nguyenphi@</td>
+                            <td class="actions">
+                                <button class="btn-icon"><img src="icon/9_iconconmat.png" alt="View"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>KH003</td>
+                            <td>Nguyễn Trần Phương</td>
+                            <td>0778453216</td>
+                            <td>phuongnguyentran@gmail.com</td>
+                            <td>NguyenPhuong</td>
+                            <td>PhuongNguyen</td>
+                            <td class="actions">
+                                <button class="btn-icon"><img src="icon/9_iconconmat.png" alt="View"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>KH004</td>
+                            <td>Nguyễn Thị Kim</td>
+                            <td>0767485997</td>
+                            <td>nguyenthikim@gmail.com</td>
+                            <td>ThiKim</td>
+                            <td>Kimm@@</td>
+                            <td class="actions">
+                                <button class="btn-icon"><img src="icon/9_iconconmat.png" alt="View"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-overlay" id="reviewModal">
+            <div class="modal-content">
+                <div class="modal-header">Xem đánh giá của: <span id="modalCustomerName"></span></div>
+                <div class="modal-body">
+                    <p style="font-weight: bold; margin-bottom: 15px;">Lịch sử đánh giá dịch vụ:</p>
+                    <div id="reviewList"></div>
+                </div>
+                <div class="modal-footer"><button class="btn-close" onclick="closeModal()">Đóng</button></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // 1. Dữ liệu giả lập (Mock Data)
+        const customers = [
+            {
+                id: "KH001", name: "Trương Thị Lan", phone: "0908431766", email: "lantruong@gmail.com", user: "LanTruong", pass: "lan123@",
+                reviews: [
+                    { service: "Làm Nail Art", date: "01/02/2026", rating: 4, comment: "Nhân viên rất tỉ mỉ, mẫu vẽ đẹp giống hệt ảnh mẫu!" },
+                    { service: "Nối mi Volume", date: "10/12/2025", rating: 4, comment: "Mi nhẹ nhưng hơi lâu." },
+                    { service: "Sơn Gel", date: "28/01/2025", rating: 5, comment: "Màu sơn rất bền, hơn 3 tuần vẫn chưa bong." }
+                ]
+            },
+            { id: "KH002", name: "Nguyễn Dương Phi", phone: "0901886314", email: "ndphi@gmail.com", user: "PhiNguyen123", pass: "nguyenphi@", reviews: [] },
+            { id: "KH003", name: "Nguyễn Trần Phương", phone: "0778453216", email: "phuongnguyentran@gmail.com", user: "NguyenPhuong", pass: "PhuongNguyen", reviews: [] },
+            { id: "KH004", name: "Nguyễn Thị Kim", phone: "0767485997", email: "nguyenthikim@gmail.com", user: "ThiKim", pass: "Kimm@@", reviews: [] }
+        ];
+
+        // 2. Hàm render bảng khách hàng
+        function renderTable() {
+            const tbody = document.getElementById('customerTableBody');
+            tbody.innerHTML = '';
+            customers.forEach(cust => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cust.id}</td>
+                    <td>${cust.name}</td>
+                    <td>${cust.phone}</td>
+                    <td>${cust.email}</td>
+                    <td>${cust.user}</td>
+                    <td>${cust.pass}</td>
+                    <td class="actions">
+                        <button class="btn-icon" onclick="openReview('${cust.id}')">
+                            <img src="icon/9_iconconmat.png" alt="View">
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 3. Hàm mở Popup và hiển thị đánh giá
+        function openReview(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            // Cập nhật tên khách hàng lên Header popup
+            document.getElementById('modalCustomerName').innerText = customer.name;
+
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '';
+
+            if (customer.reviews.length === 0) {
+                reviewList.innerHTML = '<p style="text-align:center; color:#888;">Khách hàng này chưa có đánh giá nào.</p>';
+            } else {
+                customer.reviews.forEach(rev => {
+                    const stars = '⭐'.repeat(rev.rating);
+                    const card = `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="service-name">Dịch vụ: ${rev.service}</span>
+                                <span class="review-date">${rev.date}</span>
+                            </div>
+                            <div class="stars">${stars}</div>
+                            <div class="review-text">"${rev.comment}"</div>
+                        </div>
+                    `;
+                    reviewList.innerHTML += card;
+                });
+            }
+
+            // Hiển thị modal
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+
+        // 4. Hàm đóng Popup
+        function closeModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+        }
+
+        // Đóng khi click ra ngoài vùng trắng
+        window.onclick = function (event) {
+            const modal = document.getElementById('reviewModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Khởi tạo bảng khi load trang
+        window.onload = renderTable
+
+        function searchCustomer() {
+            // 1. Lấy giá trị người dùng nhập vào và chuyển về chữ thường để so sánh
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            // 2. Lọc mảng customers dựa trên Tên hoặc Mã KH
+            const filteredCustomers = customers.filter(cust => {
+                return cust.name.toLowerCase().includes(searchTerm) ||
+                    cust.id.toLowerCase().includes(searchTerm);
+            });
+
+            // 3. Hiển thị lại bảng với danh sách đã lọc
+            renderFilteredTable(filteredCustomers);
+        }
+
+        // Hàm bổ trợ để vẽ lại bảng khi có kết quả lọc
+        function renderFilteredTable(data) {
+            const tbody = document.getElementById('customerTableBody');
+            if (!tbody) return;
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Không tìm thấy kết quả phù hợp</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(cust => `
+        <tr>
+            <td>${cust.id}</td>
+            <td>${cust.name}</td>
+            <td>${cust.phone}</td>
+            <td>${cust.email}</td>
+            <td>${cust.user}</td>
+            <td>${cust.pass}</td>
+            <td class="text-center">
+                <button class="btn-icon" onclick="openReview('${cust.id}')">
+                    <img src="https://img.icons8.com/ios-glyphs/24/8B7167/visible.png" alt="view">
+                </button>
+            </td>
+        </tr>
+    `).join('');
+        }
+    </script>
+</body>
+
+</html>

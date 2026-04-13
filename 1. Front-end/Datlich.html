@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý lịch hẹn cá nhân - 2000 Nails Eyelash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Arimo:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    
+    body { font-family: 'Arimo', sans-serif; background-color: #F8F1EB; color: #4A4A4A; -webkit-font-smoothing: antialiased; }
+
+    .bg-sidebar-deep { background-color: #8B7167; }
+    .bg-nav-active { background-color: rgba(255, 255, 255, 0.15); }
+    .text-main-brown { color: #BFA19A; }
+    
+    /* MÀU TIÊU ĐỀ ĐẶT LỊCH HẸN MỚI */
+    .text-title-booking { color: #8B6F47; }
+
+    /* MÀU NÚT MỚI */
+    .btn-custom-theme { background-color: #BFA19A; color: white; }
+
+    .double-underline {
+      position: relative;
+      padding-bottom: 12px;
+      margin-bottom: 30px;
+    }
+    .double-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 4px;
+      width: 100%;
+      height: 1.5px;
+      background-color:#BFA19A;
+    }
+
+    .hover-card { transition: all 0.3s ease; }
+    .hover-card:hover { border-color: #8B5A3C; background-color: #FDF8F5; transform: translateY(-2px); }
+
+    .btn-see-more { background-color: rgba(139, 90, 60, 0.6); color: white; transition: all 0.3s ease; }
+    .btn-see-more:hover { background-color: rgba(139, 90, 60, 1); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 90, 60, 0.3); }
+
+    /* MÀU CHỮ DỊCH VỤ, NHÂN VIÊN, THỜI GIAN MỚI */
+    .info-huge-label { color: #B9B9B9; font-weight: 100; font-size: 1.5rem; line-height: 1; margin-bottom: 2px; }
+    .info-value-text { font-weight: 500; color: #000000; font-size: 0.95rem; padding-bottom: 15px; border-bottom: 1.5px solid #F2F2F2; margin-bottom: 25px; }
+    
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+    .slot-item { border: 1px solid #DEDEDE; border-radius: 8px; padding: 10px 0; text-align: center; font-size: 13.5px; font-weight: 600; background: white; transition: 0.2s; }
+    .slot-selected { background-color: #FDF8F5; border: 1.5px solid #BFA19A !important; color: #BFA19A; }
+    .slot-booked { background-color: #BDBDBD; color: white; border: none; }
+
+    .main-panel { background-color: white; border-radius: 3rem; }
+    .btn-brown-main { background-color: #BFA19A; color: white; }
+
+    /* Custom Scrollbar for Modal */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 10px; }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+  <aside class="w-72 bg-sidebar-deep text-white flex flex-col flex-shrink-0">
+        <a href="Trang_Chu_QL.html" style="text-decoration: none; color: inherit;">
+          <div class="logo-section">
+              <img class="logo-circle" src="icon/logo.jpg" alt="">
+              <div class="logo-text">
+                  2000<br>Nails Eyelash
+              </div>
+          </div>
+        </a>
+
+        <hr class="sidebar-divider">
+        
+        <nav class="menu">
+            <a href="DatLich.html" class="menu-item active">
+                <div class="menu-icon"><img src="icon/12.Đặt lịch hẹn.png" alt=""></div>
+                Đặt lịch hẹn
+            </a>
+            <a href="LichHen.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/13. Lịch hẹn của tôi .png" alt=""></div>
+                Lịch hẹn của tôi
+            </a>
+            <a href="TaiKhoanKhach.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+  </aside>
+
+  <main class="flex-1 flex flex-col min-w-0">
+    <header class="h-20 bg-white flex items-center justify-between px-12 flex-shrink-0">
+      <h2 class="text-4xl font-bold text-title-booking tracking-tight">Đặt lịch hẹn</h2>
+      <div class="flex items-center gap-8">
+        <div class="text-right">
+          <p class="text-[#5B5B5B] text-xl font-bold">Khách hàng</p>
+          <p class="font-bold text-[#5B5B5B] text-base leading-none mt-1">Trương Lan</p>
+        </div>
+        <img src="avatar.jpg" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+        <button onclick="window.location.href='Trangchu.html'" class="btn-custom-theme px-6 py-2.5 rounded-xl font-bold text-sm uppercase transition hover:brightness-90">Đăng xuất</button>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-10 flex gap-10 items-start">
+      <div class="flex-1 main-panel p-12 space-y-12 shadow-sm border border-gray-50 h-fit">
+        
+        <section>
+          <h3 class="text-[1.65rem] font-bold text-[#333] double-underline">1. Chọn dịch vụ</h3>
+          <div class="grid grid-cols-4 gap-4">
+            <div class="slot-item hover-card cursor-pointer py-6">
+              <p class="font-bold text-gray-700 text-base">Sơn gel móng tay</p>
+              <p class="text-[11px] text-gray-300 italic my-1">60 phút</p>
+              <p class="font-bold text-main-brown text-lg">60.000 đ</p>
+            </div>
+            <div class="slot-item slot-selected cursor-pointer hover-card py-6">
+              <p class="font-bold text-gray-700 text-base">Đắp bột móng tay</p>
+              <p class="text-[11px] text-gray-300 italic my-1">90 phút</p>
+              <p class="font-bold text-main-brown text-lg">200.000 đ</p>
+            </div>
+            <div class="slot-item hover-card cursor-pointer py-6">
+              <p class="font-bold text-gray-700 text-base">Sơn úp móng</p>
+              <p class="text-[11px] text-gray-300 italic my-1">60 phút</p>
+              <p class="font-bold text-main-brown text-lg">150.000 đ</p>
+            </div>
+            <div class="slot-item hover-card cursor-pointer py-6">
+              <p class="font-bold text-gray-700 text-base">Nối mi</p>
+              <p class="text-[11px] text-gray-300 italic my-1">120 phút</p>
+              <p class="font-bold text-main-brown text-lg">300.000 đ</p>
+            </div>
+          </div>
+          <button onclick="openServiceModal()" class="w-full mt-8 py-3 btn-see-more rounded-full text-[11px] font-bold uppercase tracking-widest transition-all">
+            Xem thêm dịch vụ
+          </button>
+        </section>
+
+        <section>
+          <h3 class="text-[1.65rem] font-bold text-[#333] double-underline">2. Chọn nhân viên</h3>
+          <div class="flex gap-4">
+            <div class="flex-1 slot-item hover-card cursor-pointer p-5">
+              <div class="w-12 h-12 bg-[#BCA497] text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold text-lg">H</div>
+              <p class="text-sm font-bold text-gray-500">Tuyết Hi</p>
+            </div>
+            <div class="flex-1 slot-item hover-card cursor-pointer p-5">
+              <div class="w-12 h-12 bg-[#BCA497] text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold text-lg">P</div>
+              <p class="text-sm font-bold text-gray-500">Ái Phi</p>
+            </div>
+            <div class="flex-1 slot-item slot-selected p-5 shadow-md">
+              <div class="w-12 h-12 bg-sidebar-deep text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold text-lg">N</div>
+              <p class="text-sm font-bold text-gray-500">Nhã</p>
+            </div>
+            <div class="flex-1 slot-item hover-card cursor-pointer p-5">
+              <div class="w-12 h-12 bg-[#BCA497] text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold text-lg">Y</div>
+              <p class="text-sm font-bold text-gray-500">Phi Yến</p>
+            </div>
+            <div class="flex-1 slot-item hover-card cursor-pointer p-5">
+              <div class="w-12 h-12 bg-[#BCA497] text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold text-lg">T</div>
+              <p class="text-sm font-bold text-gray-500">Thu Thuỷ</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h3 class="text-xl font-bold mb-6 text-[#555]">Lịch trống của Nhã</h3>
+          <div class="calendar-grid mb-5">
+            <div class="slot-item slot-booked text-sm font-bold uppercase">T2 - 14/2</div>
+            <div class="slot-item slot-selected text-sm font-bold uppercase">T3 - 15/2</div>
+            <div class="slot-item font-bold text-sm uppercase hover-card cursor-pointer">T4 - 16/2</div>
+            <div class="slot-item font-bold text-sm uppercase hover-card cursor-pointer">T5 - 17/2</div>
+            <div class="slot-item font-bold text-sm uppercase hover-card cursor-pointer">T6 - 18/2</div>
+            <div class="slot-item font-bold text-sm uppercase hover-card cursor-pointer">T7 - 19/2</div>
+            <div class="slot-item font-bold text-sm uppercase hover-card cursor-pointer">CN - 20/2</div>
+          </div>
+          <div class="calendar-grid">
+            <div class="slot-item slot-booked">08:00</div>
+            <div class="slot-item hover-card cursor-pointer">13:00</div>
+            <div class="slot-item hover-card cursor-pointer">09:00</div>
+            <div class="slot-item hover-card cursor-pointer">09:00</div>
+            <div class="slot-item slot-selected">09:00</div>
+            <div class="slot-item hover-card cursor-pointer">10:00</div>
+            <div class="slot-item hover-card cursor-pointer">14:00</div>
+            <div class="slot-item slot-booked">11:00</div>
+            <div></div>
+            <div class="slot-item hover-card cursor-pointer">10:00</div>
+            <div class="slot-item slot-booked">10:00</div>
+            <div class="slot-item hover-card cursor-pointer">18:00</div>
+            <div class="slot-item hover-card cursor-pointer">14:00</div>
+            <div class="slot-item hover-card cursor-pointer">19:00</div>
+            <div></div><div></div>
+            <div class="slot-item slot-booked">15:00</div>
+            <div class="slot-item hover-card cursor-pointer">17:00</div>
+            <div></div>
+            <div class="slot-item hover-card cursor-pointer">18:00</div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="w-80 flex-shrink-0">
+        <div class="bg-white rounded-[1rem] shadow-sm overflow-hidden border border-gray-100 h-fit">
+          <div class="bg-sidebar-deep p-6 text-center">
+            <h3 class="text-white font-bold text-xl uppercase tracking-widest">Thông tin đặt lịch</h3>
+          </div>
+          <div class="p-10 space-y-1">
+            <div>
+              <p class="info-huge-label">Dịch vụ</p>
+              <p class="info-value-text">Đắp bột móng tay</p>
+            </div>
+            <div>
+              <p class="info-huge-label">Nhân viên</p>
+              <p class="info-value-text">Nhã</p>
+            </div>
+            <div>
+              <p class="info-huge-label">Thời gian</p>
+              <p class="info-value-text">18/02/2026 lúc 09:00</p>
+            </div>
+            <div class="bg-[#FDF1F0] p-6 rounded-[1.5rem] mt-8">
+              <p class="info-huge-label">Tổng tiền</p>
+              <p class="text-[#E97373] text-3xl font-bold mt-1">200.000 đ</p>
+            </div>
+          </div>
+          <div class="px-10 pb-10">
+            <button class="w-full py-4 btn-custom-theme font-bold rounded-2xl text-lg uppercase tracking-widest shadow-lg transition hover:brightness-90 hover:scale-[1.02]">
+              Xác nhận đặt lịch
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div id="serviceModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeServiceModal()"></div>
+    <div class="bg-white w-full max-w-2xl rounded-[3.5rem] shadow-2xl p-10 relative z-10 overflow-hidden animate-in fade-in zoom-in duration-300">
+        <button onclick="closeServiceModal()" class="absolute top-8 right-10 text-gray-400 hover:text-gray-800 text-3xl font-light">&times;</button>
+        <div class="flex items-center justify-between mb-8 pr-12">
+            <h2 class="text-3xl font-black text-gray-800 uppercase tracking-tighter">Chọn dịch vụ</h2>
+            <button onclick="closeServiceModal()" class="bg-[#BCA497] text-white px-8 py-2 rounded-full font-bold text-sm shadow-md transition hover:scale-105">CHỌN</button>
+        </div>
+        <div class="relative mb-8">
+            <i class="fa-solid fa-magnifying-glass absolute left-6 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" placeholder="Tìm kiếm theo tên dịch vụ..." 
+                   class="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#BCA497]/50 transition">
+        </div>
+        <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-[2.5rem] hover:bg-[#FDF8F5] cursor-pointer transition border border-transparent hover:border-[#D4B6A6]">
+                <div class="flex items-center gap-6">
+                    <img src="lamnailnghethuat.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                    <span class="font-bold text-gray-700 text-lg">Làm Nail Nghệ Thuật</span>
+                </div>
+                <span class="font-bold text-[#8D766A] text-lg mr-6">150.000đ</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-[2.5rem] hover:bg-[#FDF8F5] cursor-pointer transition border border-transparent hover:border-[#D4B6A6]">
+                <div class="flex items-center gap-6">
+                    <img src="lamminghethuat.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                    <span class="font-bold text-gray-700 text-lg">Làm Mi Nghệ Thuật</span>
+                </div>
+                <span class="font-bold text-[#8D766A] text-lg mr-6">250.000đ</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-[2.5rem] hover:bg-[#FDF8F5] cursor-pointer transition border border-transparent hover:border-[#D4B6A6]">
+                <div class="flex items-center gap-6">
+                    <img src="goidauduongsinh.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                    <span class="font-bold text-gray-700 text-lg">Gội Đầu Dưỡng Sinh</span>
+                </div>
+                <span class="font-bold text-[#8D766A] text-lg mr-6">120.000đ</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-[2.5rem] hover:bg-[#FDF8F5] cursor-pointer transition border border-transparent hover:border-[#D4B6A6]">
+                <div class="flex items-center gap-6">
+                    <img src="spa.jpg" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-sm">
+                    <span class="font-bold text-gray-700 text-lg">Spa & Skin Care</span>
+                </div>
+                <span class="font-bold text-[#8D766A] text-lg mr-6">320.000đ</span>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    function openServiceModal() {
+        const modal = document.getElementById('serviceModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeServiceModal() {
+        const modal = document.getElementById('serviceModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeServiceModal();
+    });
+  </script>
+
+</body>
+</html>

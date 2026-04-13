@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="Trang_Chu_NV.html" style="text-decoration: none; color: inherit;">
+            <div class="logo-section">
+                <img class="logo-circle" src="icon/logo.jpg" alt="">
+                <div class="logo-text">
+                    2000<br>Nails Eyelash
+                </div>
+            </div>
+        </a>
+        
+        <hr class="sidebar-divider">
+        
+        <nav class="menu">
+            <a href="Quan_Ly_Ca_Lam_NV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/7_Quanlycalam.png" alt=""></div>
+                Quản lý ca làm cá nhân
+            </a>
+            <a href="QL_Tai_Khoan_Ca_Nhan_NV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">Quản lý tài khoản cá nhân</h1>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-details">
+                        <span class="user-role">Nhân viên</span>
+                        <span class="user-name">Phương Nhã</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=5" alt="Avatar" class="avatar">
+                </div>
+                <div class="header-divider"></div>
+                <button class="btn-logout" onclick="window.location.href='Dang_Nhap.html'">Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            <div class="account-container">
+                <div class="card info-card">
+                    <div class="card-header">Thông tin chi tiết</div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" value="">
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <input type="text" value="">
+                            </div>
+                            <div class="form-group">
+                                <label>Mã nhân viên</label>
+                                <input type="text" value="" readonly style="background-color: #fafafa;">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="">
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" value="">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày sinh</label>
+                                <input type="text" value="">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Địa chỉ</label>
+                                <input type="text" value="">
+                            </div>
+                        </div>
+                        <button class="btn-action" id="btnOpenUpdateModal">Cập nhật thông tin</button>
+                    </div>
+                </div>
+
+                <div class="card security-card">
+                    <div class="card-header">Bảo mật</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Tên tài khoản</label>
+                            <input type="text" placeholder="Phương Nhã" readonly style="background-color: #fafafa;">
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu</label>
+                            <input type="password" value="" readonly>
+                        </div>
+                        <button class="btn-action" id="btnOpenPasswordModal" style="margin-top: 10px;">Đổi mật khẩu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="updateModal">
+        <div class="modal-container" style="max-width: 650px;">
+            <div class="modal-header">Cập nhật thông tin</div>
+            <div class="modal-body">
+                <div class="form-grid" style="margin-bottom: 20px; gap: 15px 25px;">
+                    <div class="form-group">
+                        <label>Họ và tên <span class="asterisk">*</span></label>
+                        <input type="text" value="Lý Phương Nhã">
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <select>
+                            <option>Nữ</option>
+                            <option>Nam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mã nhân viên</label>
+                        <input type="text" value="NV004" class="input-disabled">
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="asterisk">*</span></label>
+                        <input type="email" value="phuongnha@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại <span class="asterisk">*</span></label>
+                        <input type="text" value="0912345678">
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input type="text" value="19/02/1990">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Địa chỉ</label>
+                        <input type="text" value="03 Đường Nguyễn Văn Cừ , Quận hải Châu , TP.Đà Nẵng">
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-cancel" id="btnCancelUpdate">Huỷ</button>
+                    <button class="btn-save" id="btnSaveUpdate">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-container" style="max-width: 450px;">
+            <div class="modal-header">Đổi mật khẩu</div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Mật khẩu hiện tại <span class="asterisk">*</span></label>
+                    <input type="password" placeholder="Nhập mật khẩu hiện tại">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Mật khẩu mới <span class="asterisk">*</span></label>
+                    <div class="input-with-icon">
+                        <input type="password" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label>Xác nhận mật khẩu <span class="asterisk">*</span></label>
+                    <div class="input-with-icon">
+                        <input type="password" placeholder="Nhập lại mật khẩu mới">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="modal-actions center">
+                    <button class="btn-cancel" id="btnCancelPassword">Huỷ</button>
+                    <button class="btn-save" id="btnSavePassword">Đổi mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal" style="background-color: rgba(245, 240, 237, 0.9);">
+        <div class="success-modal">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h2 class="success-title">Thành công!</h2>
+            <p class="success-message" id="successMessageText">Thành công.</p>
+        </div>
+    </div>
+
+    <script>
+        // Các elements cho Popup Cập nhật thông tin
+        const updateModal = document.getElementById('updateModal');
+        const btnOpenUpdateModal = document.getElementById('btnOpenUpdateModal');
+        const btnCancelUpdate = document.getElementById('btnCancelUpdate');
+        const btnSaveUpdate = document.getElementById('btnSaveUpdate');
+
+        // Các elements cho Popup Đổi mật khẩu
+        const passwordModal = document.getElementById('passwordModal');
+        const btnOpenPasswordModal = document.getElementById('btnOpenPasswordModal');
+        const btnCancelPassword = document.getElementById('btnCancelPassword');
+        const btnSavePassword = document.getElementById('btnSavePassword');
+
+        // Popup Thông báo thành công (Dùng chung)
+        const successModal = document.getElementById('successModal');
+        const successMessageText = document.getElementById('successMessageText');
+
+        // Hàm hiển thị Popup thành công với câu thông báo tuỳ chỉnh
+        function showSuccessModal(message) {
+            successMessageText.innerText = message;
+            successModal.style.display = 'flex';
+            
+            // Đóng sau 800ms
+            setTimeout(() => {
+                successModal.style.display = 'none';
+            }, 800);
+        }
+
+        // --- XỬ LÝ SỰ KIỆN CHO CẬP NHẬT THÔNG TIN ---
+        btnOpenUpdateModal.addEventListener('click', () => { updateModal.style.display = 'flex'; });
+        btnCancelUpdate.addEventListener('click', () => { updateModal.style.display = 'none'; });
+        btnSaveUpdate.addEventListener('click', () => {
+            updateModal.style.display = 'none';
+            showSuccessModal('Cập nhật thông tin thành công.');
+        });
+
+        // --- XỬ LÝ SỰ KIỆN CHO ĐỔI MẬT KHẨU ---
+        btnOpenPasswordModal.addEventListener('click', () => { passwordModal.style.display = 'flex'; });
+        btnCancelPassword.addEventListener('click', () => { passwordModal.style.display = 'none'; });
+        btnSavePassword.addEventListener('click', () => {
+            passwordModal.style.display = 'none';
+            showSuccessModal('Đổi mật khẩu thành công.');
+        });
+
+        // Đóng popup khi click vào nền tối bên ngoài (Tuỳ chọn)
+        window.addEventListener('click', (e) => {
+            if (e.target === updateModal) updateModal.style.display = 'none';
+            if (e.target === passwordModal) passwordModal.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>

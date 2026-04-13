@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý nhân viên - 2000 Nails Eyelash</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brown: #8B6F5E;
+    --brown-dark: #6B5246;
+    --brown-light: #C4A99A;
+    --brown-bg: #F5EDE8;
+    --sidebar-bg: #8B7167;
+    --sidebar-text: #E8D5C8;
+    --white: #FFFFFF;
+    --text-dark: #2D1F1A;
+    --text-mid: #6B5246;
+    --text-light: #9E8078;
+    --border: #E0CEC8;
+    --green: #4CAF7D;
+    --red: #E85C5C;
+    --red-bg: #FDEAEA;
+    --gray-bg: #F9F4F2;
+    --shadow: 0 2px 12px rgba(139,111,94,0.12);
+    --shadow-lg: 0 8px 32px rgba(139,111,94,0.18);
+    --accent: #BFA19A;
+  }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--gray-bg);
+    color: var(--text-dark);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 200px; min-width: 200px;
+    background: #8B7167;
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0;
+    height: 100vh; z-index: 100;
+  }
+  .sidebar, .sidebar * { color: #FFFFFF !important; }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    min-height: 88px;
+  }
+  .logo-img {
+    width: 52px; height: 52px; object-fit: cover;
+    border-radius: 50%; background: #fff; flex-shrink: 0;
+  }
+  .logo-text { font-size: 12px; line-height: 1.3; }
+  .logo-text strong { display: block; font-size: 15px; font-weight: 700; }
+  .logo-text span { display: block; font-size: 12px; opacity: 0.9; }
+
+  .sidebar-nav {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: space-evenly; padding: 8px 0;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 18px; min-height: 58px;
+    font-size: 13px; cursor: pointer;
+    transition: background 0.18s;
+  }
+  .nav-item:hover { background: rgba(191,161,154,0.5); }
+  .nav-item.active { background: #BFA19A; font-weight: 600; }
+  .nav-icon-img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+  .action-icon-img { width: 18px; height: 18px; object-fit: contain; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 200px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--white); padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .page-title { font-size: 22px; font-weight: 700; color: var(--brown); }
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+  .user-info { text-align: right; font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+  .user-info strong { display: block; font-size: 13px; color: var(--text-dark); font-weight: 600; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--brown-light);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 15px;
+  }
+  .btn-logout {
+    background: #BFA19A; color: white; border: none;
+    padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: inherit; transition: background 0.18s;
+  }
+  .btn-logout:hover { background: var(--brown-dark); }
+
+  /* ── CONTENT ── */
+  .content { padding: 28px; flex: 1; }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    background: var(--white); border-radius: 12px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px; box-shadow: var(--shadow);
+  }
+  .search-box { flex: 1; position: relative; }
+  .search-box input {
+    width: 100%; height: 48px;
+    padding-left: 50px; padding-right: 14px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 14px; font-family: inherit;
+    background: var(--gray-bg); outline: none;
+  }
+  .search-icon {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; pointer-events: none; color: var(--text-light);
+  }
+  .search-icon svg { width: 18px; height: 18px; }
+  .btn-create {
+    background: #BFA19A; color: white; border: none;
+    padding: 9px 20px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; gap: 6px; white-space: nowrap;
+    transition: background 0.18s, transform 0.1s;
+  }
+  .btn-create:hover { background: var(--brown-dark); transform: translateY(-1px); }
+
+  /* ── TABLE ── */
+  .table-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .table-header {
+    display: grid; grid-template-columns: 0.7fr 1.5fr 1.2fr 1.2fr 1.2fr 1fr;
+    padding: 13px 20px; background: #8B7167; color: white;
+    font-size: 13px; font-weight: 600;
+  }
+  .table-row {
+    display: grid; grid-template-columns: 0.7fr 1.5fr 1.2fr 1.2fr 1.2fr 1fr;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    align-items: center; transition: background 0.15s;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: var(--brown-bg); }
+
+  .cell-id { font-size: 13px; font-weight: 600; color: var(--brown); }
+  .cell-name { font-size: 13px; font-weight: 500; color: var(--text-dark); }
+  .cell-phone { font-size: 13px; color: var(--text-mid); }
+  .cell-username { font-size: 13px; color: var(--text-dark); }
+  .cell-password { font-size: 13px; color: var(--text-mid); letter-spacing: 1px; }
+
+  .actions { display: flex; align-items: center; gap: 7px; }
+  .action-btn {
+    width: 32px; height: 32px; border: none; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.15s;
+    background: transparent; border: 1px solid #eee;
+  }
+  .action-btn:hover { transform: scale(1.15); }
+
+  /* ── OVERLAY ── */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(45,31,26,0.45);
+    z-index: 200; align-items: center; justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.open { display: flex; }
+
+  /* ── MODAL ── */
+  .modal {
+    background: white; border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    width: 90%; max-width: 520px;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform: translateY(30px) scale(0.97); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+  .modal-header {
+    background: #BFA19A; color: white;
+    padding: 16px 22px; font-size: 16px; font-weight: 700;
+    border-radius: 14px 14px 0 0;
+  }
+  .modal-body { padding: 22px; }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+  label .req { color: var(--red); }
+  input[type="text"], input[type="password"], input[type="number"] {
+    width: 100%; padding: 9px 13px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-family: inherit;
+    color: var(--text-dark); background: white;
+    outline: none; transition: border-color 0.18s, box-shadow 0.18s;
+  }
+  input:focus {
+    border-color: var(--brown-light);
+    box-shadow: 0 0 0 3px rgba(196,169,154,0.2);
+  }
+  input[readonly] { background: var(--gray-bg); color: var(--text-mid); cursor: default; }
+  select {
+    width: 100%; padding: 9px 13px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 13px; font-family: inherit;
+    color: var(--text-dark); background: white;
+    outline: none; appearance: none;
+    transition: border-color 0.18s;
+  }
+  select:focus { border-color: var(--brown-light); box-shadow: 0 0 0 3px rgba(196,169,154,0.2); }
+
+  .form-footer { display: flex; gap: 12px; justify-content: flex-end; padding-top: 8px; }
+  .btn-cancel {
+    padding: 9px 22px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: white;
+    color: var(--text-mid); font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-cancel:hover { background: var(--gray-bg); }
+  .btn-save {
+    padding: 9px 22px; border-radius: 8px; border: none;
+    background: #BFA19A; color: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--brown-dark); }
+
+  /* ── DETAIL MODAL ── */
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table tr { border-bottom: 1px solid var(--border); }
+  .detail-table tr:last-child { border-bottom: none; }
+  .detail-table td { padding: 12px 14px; font-size: 13px; vertical-align: top; }
+  .detail-table td:first-child {
+    color: var(--text-light); font-weight: 500; width: 45%;
+    background: var(--gray-bg);
+  }
+  .detail-table td:last-child { color: var(--text-dark); font-weight: 600; }
+
+  /* ── CONFIRM ── */
+  .confirm-modal { max-width: 380px; text-align: center; }
+  .confirm-icon { font-size: 44px; margin-bottom: 14px; }
+  .confirm-title { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 18px; line-height: 1.5; }
+  .confirm-footer { display: flex; gap: 12px; justify-content: center; }
+  .btn-danger {
+    padding: 9px 22px; border-radius: 8px; border: none;
+    background: var(--red); color: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-danger:hover { background: #c94b4b; }
+
+  /* ── SUCCESS MODAL ── */
+  .success-modal { max-width: 340px; text-align: center; }
+  .success-body { padding: 36px 28px; }
+  .success-icon { font-size: 44px; color: var(--green); margin-bottom: 10px; }
+  .success-title { font-size: 16px; font-weight: 700; color: var(--green); margin-bottom: 6px; }
+  .success-msg { font-size: 13px; color: var(--text-mid); margin-bottom: 20px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; top: 24px; right: 24px;
+    background: white; border-radius: 12px;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    z-index: 999; min-width: 280px;
+    transform: translateX(120%);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    border-left: 4px solid var(--red);
+  }
+  .toast.show { transform: translateX(0); }
+  .toast-text strong { display: block; font-size: 14px; font-weight: 700; }
+  .toast-text span { font-size: 12px; color: var(--text-light); }
+
+  .empty-state { padding: 50px 20px; text-align: center; color: var(--text-light); font-size: 14px; }
+
+  /* ── FIELD ERROR ── */
+  .field-error { font-size: 11px; color: var(--red); margin-top: 4px; display: none; }
+  .input-error { border-color: var(--red) !important; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="images/logo.jpg" alt="2000 Nails Logo" class="logo-img">
+    <div class="logo-text">
+      <strong>2000</strong>
+      <span>Nails Eyelash</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item">
+      <img src="images/1. Quản lý dịch vụ.png" alt="" class="nav-icon-img">
+      <span>Quản lý dịch vụ</span>
+    </div>
+    <div class="nav-item active">
+      <img src="images/2. Quản lý nhân viên.png" alt="" class="nav-icon-img">
+      <span>Quản lý nhân viên</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/3. Quản lý khách hàng.png" alt="" class="nav-icon-img">
+      <span>Quản lý khách hàng</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/4. Quản lý đặt lịch .png" alt="" class="nav-icon-img">
+      <span>Quản lý đặt lịch</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/5. Quản lý khuyến mãi.png" alt="" class="nav-icon-img">
+      <span>Quản lý khuyến mãi</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/6. Quản lý báo cáo.png" alt="" class="nav-icon-img">
+      <span>Quản lý báo cáo</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/7. Quản lý ca làm.png" alt="" class="nav-icon-img">
+      <span>Quản lý ca làm</span>
+    </div>
+    <div class="nav-item">
+      <img src="images/8. Quản lý tài khoản cá nhân.png" alt="" class="nav-icon-img">
+      <span>Quản lý tài khoản cá nhân</span>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <h1 class="page-title">Quản lý nhân viên</h1>
+    <div class="topbar-right">
+      <div class="user-info">
+        <span>Quản lý hệ thống</span>
+        <strong>Thu Thuỷ</strong>
+      </div>
+      <div class="avatar">T</div>
+      <button class="btn-logout">Đăng xuất</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên hoặc mã nhân viên..." oninput="filterStaff()">
+      </div>
+      <button class="btn-create" onclick="openCreate()">＋ Tạo mới nhân viên</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>Mã NV</div>
+        <div>Họ và tên NV</div>
+        <div>SĐT</div>
+        <div>Tên đăng nhập</div>
+        <div>Mật khẩu</div>
+        <div>Thao tác</div>
+      </div>
+      <div id="tableBody"></div>
+    </div>
+  </div>
+</main>
+
+<!-- VIEW MODAL -->
+<div class="overlay" id="viewOverlay" onclick="handleOC(event,'viewOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">Thông tin chi tiết</div>
+    <div class="modal-body">
+      <table class="detail-table">
+        <tr><td>Mã nhân viên:</td><td id="v_id">—</td></tr>
+        <tr><td>Họ và tên nhân viên:</td><td id="v_name">—</td></tr>
+        <tr><td>Số điện thoại:</td><td id="v_phone">—</td></tr>
+        <tr><td>Tên đăng nhập:</td><td id="v_username">—</td></tr>
+        <tr><td>Mật khẩu:</td><td id="v_password">—</td></tr>
+      </table>
+      <div class="form-footer" style="margin-top:20px;">
+        <button class="btn-save" onclick="closeModal('viewOverlay')">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE MODAL -->
+<div class="overlay" id="createOverlay" onclick="handleOC(event,'createOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">Tạo mới nhân viên</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Tên nhân viên <span class="req">*</span></label>
+        <input type="text" id="c_name" placeholder="Nhập họ tên">
+        <div class="field-error" id="c_name_err"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Số điện thoại (10 số) <span class="req">*</span></label>
+          <input type="text" id="c_phone" placeholder="090..." maxlength="10">
+          <div class="field-error" id="c_phone_err"></div>
+        </div>
+        <div class="form-group">
+          <label>Lương (VNĐ) <span class="req">*</span></label>
+          <input type="number" id="c_salary" placeholder="200000" min="0">
+          <div class="field-error" id="c_salary_err"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mã NV <span class="req">*</span></label>
+        <input type="text" id="c_code" placeholder="Nhập mã nhân viên">
+        <div class="field-error" id="c_code_err"></div>
+      </div>
+      <div class="form-group">
+        <label>Tên đăng nhập <span class="req">*</span></label>
+        <input type="text" id="c_username" placeholder="Nhập họ tên">
+        <div class="field-error" id="c_username_err"></div>
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu <span class="req">*</span></label>
+        <input type="text" id="c_password" placeholder="Nhập mật khẩu" value="nhanvien@123">
+        <div class="field-error" id="c_password_err"></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-cancel" onclick="closeModal('createOverlay')">Hủy</button>
+        <button class="btn-save" onclick="saveCreate()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="overlay" id="editOverlay" onclick="handleOC(event,'editOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">Cập nhật thông tin nhân viên</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Tên nhân viên</label>
+        <input type="text" id="e_name" placeholder="Nhập họ tên">
+        <div class="field-error" id="e_name_err"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Số điện thoại (10 số)</label>
+          <input type="text" id="e_phone" placeholder="090..." maxlength="10">
+          <div class="field-error" id="e_phone_err"></div>
+        </div>
+        <div class="form-group">
+          <label>Lương (VNĐ)</label>
+          <input type="number" id="e_salary" placeholder="200000" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mã NV <span class="req">*</span></label>
+        <input type="text" id="e_code" readonly>
+        <div class="field-error" id="e_code_err"></div>
+      </div>
+      <div class="form-group">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="e_username" placeholder="Nhập họ tên">
+        <div class="field-error" id="e_username_err"></div>
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu</label>
+        <input type="text" id="e_password" placeholder="Nhập mật khẩu">
+        <div class="field-error" id="e_password_err"></div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-cancel" onclick="closeModal('editOverlay')">Hủy</button>
+        <button class="btn-save" onclick="saveEdit()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="overlay" id="deleteOverlay" onclick="handleOC(event,'deleteOverlay')">
+  <div class="modal confirm-modal" onclick="event.stopPropagation()">
+    <div class="modal-body" style="padding:32px 28px;">
+      <div class="confirm-icon">⚠️</div>
+      <div class="confirm-title">Bạn có chắc chắn muốn xóa nhân viên này không?</div>
+      <div class="confirm-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteOverlay')">Hủy</button>
+        <button class="btn-danger" onclick="confirmDelete()">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="overlay" id="successOverlay" onclick="handleOC(event,'successOverlay')">
+  <div class="modal success-modal" onclick="event.stopPropagation()">
+    <div class="success-body">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Thành công!</div>
+      <div class="success-msg" id="successMsg">Thao tác thành công.</div>
+      <button class="btn-save" style="width:100%" onclick="closeModal('successOverlay')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- ERROR TOAST -->
+<div class="toast" id="toast">
+  <span>❌</span>
+  <div class="toast-text">
+    <strong>Lỗi!</strong>
+    <span id="toastMsg">Vui lòng điền đầy đủ thông tin.</span>
+  </div>
+</div>
+
+<script>
+let staff = [
+  { id:1, code:'NV001', name:'Nguyễn Thị Hoa',  phone:'0908431766', salary:5000000, username:'NV001', password:'NV001abc' },
+  { id:2, code:'NV002', name:'Nguyễn Thị Lan',  phone:'0901886314', salary:5000000, username:'NV002', password:'NV002abc' },
+  { id:3, code:'NV003', name:'Phạm Lan Anh',     phone:'0778453216', salary:5500000, username:'NV003', password:'NV003abc' },
+  { id:4, code:'NV004', name:'Nguyễn Thị Kim',   phone:'0767485997', salary:5000000, username:'NV004', password:'NV004abc' },
+];
+let nextId = 5;
+let editId = null;
+let deleteId = null;
+
+/* ── RENDER ── */
+function renderTable(list) {
+  const tb = document.getElementById('tableBody');
+  if (!list.length) {
+    tb.innerHTML = '<div class="empty-state">Không có dữ liệu</div>'; return;
+  }
+  tb.innerHTML = list.map(s => `
+    <div class="table-row">
+      <div class="cell-id">${s.code}</div>
+      <div class="cell-name">${s.name}</div>
+      <div class="cell-phone">${s.phone}</div>
+      <div class="cell-username">${s.username}</div>
+      <div class="cell-password">${s.password}</div>
+      <div class="actions">
+        <button class="action-btn" onclick="openView(${s.id})" title="Xem chi tiết">
+          <img src="icon/9_iconconmat.png" alt="Xem" class="action-icon-img">
+        </button>
+        <button class="action-btn" onclick="openEdit(${s.id})" title="Chỉnh sửa">
+          <img src="icon/10_iconbutchi.png" alt="Sửa" class="action-icon-img">
+        </button>
+        <button class="action-btn" onclick="openDelete(${s.id})" title="Xóa">
+          <img src="icon/11_iconthungrac.png" alt="Xóa" class="action-icon-img">
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+function filterStaff() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderTable(staff.filter(s =>
+    s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)
+  ));
+}
+
+/* ── VIEW ── */
+function openView(id) {
+  const s = staff.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('v_id').textContent       = s.code;
+  document.getElementById('v_name').textContent     = s.name;
+  document.getElementById('v_phone').textContent    = s.phone;
+  document.getElementById('v_username').textContent = s.username;
+  document.getElementById('v_password').textContent = s.password;
+  openModal('viewOverlay');
+}
+
+/* ── CREATE ── */
+function openCreate() {
+  clearErrors('c');
+  ['c_name','c_phone','c_salary','c_code','c_username'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('c_password').value = 'nhanvien@123';
+  openModal('createOverlay');
+}
+
+function saveCreate() {
+  clearErrors('c');
+  const name     = document.getElementById('c_name').value.trim();
+  const phone    = document.getElementById('c_phone').value.trim();
+  const salary   = document.getElementById('c_salary').value.trim();
+  const code     = document.getElementById('c_code').value.trim();
+  const username = document.getElementById('c_username').value.trim();
+  const password = document.getElementById('c_password').value.trim();
+
+  let valid = true;
+
+  if (!name) { showFieldErr('c_name_err', 'Không được để trống'); valid = false; }
+  if (!phone) { showFieldErr('c_phone_err', 'Không được để trống'); valid = false; }
+  else if (!/^\d{10}$/.test(phone)) { showFieldErr('c_phone_err', 'Số điện thoại không hợp lệ'); valid = false; }
+  if (!salary) { showFieldErr('c_salary_err', 'Không được để trống'); valid = false; }
+  if (!code) { showFieldErr('c_code_err', 'Không được để trống'); valid = false; }
+  else if (staff.some(s => s.code.toLowerCase() === code.toLowerCase())) {
+    showFieldErr('c_code_err', 'Mã nhân viên đã tồn tại'); valid = false;
+  }
+  if (!username) { showFieldErr('c_username_err', 'Không được để trống'); valid = false; }
+  else if (!/^[a-zA-ZÀ-ỹ\s]+$/.test(username) && !/^\w+$/.test(username)) {
+    showFieldErr('c_username_err', 'Tên đăng nhập chỉ chứa chữ cái'); valid = false;
+  } else if (staff.some(s => s.username.toLowerCase() === username.toLowerCase())) {
+    showFieldErr('c_username_err', 'Tên đăng nhập đã tồn tại'); valid = false;
+  }
+  if (!password) { showFieldErr('c_password_err', 'Không được để trống'); valid = false; }
+  else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d])/.test(password)) {
+    showFieldErr('c_password_err', 'Mật khẩu phải có chữ, số và ký tự đặc biệt'); valid = false;
+  }
+
+  if (!valid) return;
+
+  staff.push({ id: nextId++, code, name, phone, salary: parseInt(salary), username, password });
+  closeModal('createOverlay');
+  filterStaff();
+  showSuccess('Tạo nhân viên mới thành công.');
+}
+
+/* ── EDIT ── */
+function openEdit(id) {
+  const s = staff.find(x => x.id === id);
+  if (!s) return;
+  editId = id;
+  clearErrors('e');
+  document.getElementById('e_name').value     = s.name;
+  document.getElementById('e_phone').value    = s.phone;
+  document.getElementById('e_salary').value   = s.salary;
+  document.getElementById('e_code').value     = s.code;
+  document.getElementById('e_username').value = s.username;
+  document.getElementById('e_password').value = s.password;
+  openModal('editOverlay');
+}
+
+function saveEdit() {
+  clearErrors('e');
+  const name     = document.getElementById('e_name').value.trim();
+  const phone    = document.getElementById('e_phone').value.trim();
+  const salary   = document.getElementById('e_salary').value.trim();
+  const username = document.getElementById('e_username').value.trim();
+  const password = document.getElementById('e_password').value.trim();
+
+  let valid = true;
+
+  if (!name) { showFieldErr('e_name_err', 'Không được để trống'); valid = false; }
+  if (phone && !/^\d{10}$/.test(phone)) { showFieldErr('e_phone_err', 'Số điện thoại không hợp lệ'); valid = false; }
+  if (username && staff.some(s => s.id !== editId && s.username.toLowerCase() === username.toLowerCase())) {
+    showFieldErr('e_username_err', 'Tên đăng nhập đã tồn tại'); valid = false;
+  }
+  if (password && !/(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d])/.test(password)) {
+    showFieldErr('e_password_err', 'Mật khẩu phải có chữ, số và ký tự đặc biệt'); valid = false;
+  }
+
+  if (!valid) return;
+
+  const idx = staff.findIndex(x => x.id === editId);
+  staff[idx] = {
+    ...staff[idx],
+    name: name || staff[idx].name,
+    phone: phone || staff[idx].phone,
+    salary: salary ? parseInt(salary) : staff[idx].salary,
+    username: username || staff[idx].username,
+    password: password || staff[idx].password,
+  };
+  closeModal('editOverlay');
+  filterStaff();
+  showSuccess('Dữ liệu nhân viên đã được cập nhật thành công.');
+}
+
+/* ── DELETE ── */
+function openDelete(id) { deleteId = id; openModal('deleteOverlay'); }
+function confirmDelete() {
+  staff = staff.filter(x => x.id !== deleteId);
+  deleteId = null;
+  closeModal('deleteOverlay');
+  filterStaff();
+  showSuccess('Xóa nhân viên thành công.');
+}
+
+/* ── HELPERS ── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function handleOC(e, id) { if (e.target.id === id) closeModal(id); }
+
+function showSuccess(msg) {
+  document.getElementById('successMsg').textContent = msg;
+  openModal('successOverlay');
+}
+function showToast(msg) {
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+function showFieldErr(errId, msg) {
+  const el = document.getElementById(errId);
+  el.textContent = msg;
+  el.style.display = 'block';
+  const inputId = errId.replace('_err', '');
+  const inp = document.getElementById(inputId);
+  if (inp) inp.classList.add('input-error');
+}
+function clearErrors(prefix) {
+  document.querySelectorAll(`[id^="${prefix}_"][id$="_err"]`).forEach(el => {
+    el.style.display = 'none'; el.textContent = '';
+  });
+  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+}
+
+/* ── NAV CLICK ── */
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+/* ── INIT ── */
+renderTable(staff);
+</script>
+</body>
+</html>

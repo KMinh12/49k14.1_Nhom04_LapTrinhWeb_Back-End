@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - 2000 Nails & Eyelash</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body class="login-page">
+
+    <div class="login-card">
+        <h1 class="login-title">ĐĂNG NHẬP</h1>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+            </div>
+
+            <div class="radio-group">
+                <label class="radio-container">
+                    <input type="radio" name="role" value="quanly">
+                    <span class="checkmark"></span>
+                    Quản lý
+                </label>
+                <label class="radio-container">
+                    <input type="radio" name="role" value="nhanvien" checked>
+                    <span class="checkmark"></span>
+                    Nhân viên
+                </label>
+            </div>
+
+            <button type="submit" class="btn-login">ĐĂNG NHẬP</button>
+        </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal" style="background-color: rgba(245, 240, 237, 0.95);">
+        <div class="success-modal">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h2 class="success-title">Đăng nhập thành công!</h2>
+            <p class="success-message" id="successMessageText">Đang chuyển hướng...</p>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const successModal = document.getElementById('successModal');
+        const successMessageText = document.getElementById('successMessageText');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Lấy giá trị radio được chọn
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+
+            // Hiển thị modal thành công
+            successModal.style.display = 'flex';
+
+            // Xác định trang đích dựa trên vai trò
+            let redirectPage = '';
+
+            if (selectedRole === 'quanly') {
+                redirectPage = 'Trang_Chu_QL.html';
+                successMessageText.textContent = 'Đang chuyển đến trang Quản lý...';
+            } else {
+                redirectPage = 'Trang_Chu_NV.html';
+                successMessageText.textContent = 'Đang chuyển đến trang Nhân viên...';
+            }
+
+            // Chuyển trang sau 1.2 giây
+            setTimeout(() => {
+                window.location.href = redirectPage;
+            }, 1200);
+        });
+
+        // Click ngoài modal để đóng (tùy chọn)
+        window.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

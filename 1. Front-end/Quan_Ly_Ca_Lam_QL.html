@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý ca làm - 2000 Nails Eyelash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brown: #8B7167;
+            --brown-light: #BFA19A;
+            --brown-dark: #6B5246;
+            --bg: #F9F4F2;
+            --white: #FFFFFF;
+            --text: #2D1F1A;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Be Vietnam Pro', sans-serif; }
+        body {
+            background: var(--bg);
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar đồng bộ */
+        .sidebar {
+            width: 260px;
+            background: var(--brown);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .logo-section {
+            padding: 25px 20px;
+            background: rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-circle {
+            width: 52px; height: 52px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--brown);
+        }
+        .menu {
+            flex: 1;
+            padding: 15px 0;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 22px;
+            color: white;
+            text-decoration: none;
+            font-size: 14.5px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .menu-item:hover, .menu-item.active {
+            background: rgba(191,161,154,0.45);
+        }
+        .menu-item.active { background: var(--brown-light); font-weight: 600; }
+        .menu-icon img { width: 26px; height: 26px; object-fit: contain; }
+
+        /* Main */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .topbar {
+            background: white;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E0CEC8;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--brown);
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #C4A99A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Content */
+        .content {
+            padding: 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .toolbar {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: 1.5px solid #E0CEC8;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+        .btn-create {
+            background: var(--brown-light);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Table */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .table-header {
+            background: var(--brown);
+            color: white;
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr 1fr 1fr 1fr 0.8fr;
+            padding: 16px 20px;
+            font-weight: 500;
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr 1fr 1fr 1fr 0.8fr;
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        .table-row:last-child { border-bottom: none; }
+        .table-row:hover { background: #F9F4F2; }
+
+        .action-btn {
+            width: 34px; height: 34px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 0 4px;
+        }
+
+        /* Modal */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(45,31,26,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .overlay.active { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 14px;
+            width: 90%;
+            max-width: 560px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .modal-header {
+            background: var(--brown-light);
+            color: white;
+            padding: 18px 24px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group.full { grid-column: 1 / -1; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #6B5246;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #E0CEC8;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        .modal-footer {
+            padding: 20px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            background: #f8f4f1;
+        }
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-cancel { background: white; border: 1.5px solid #ccc; }
+        .btn-save { background: var(--brown-light); color: white; border: none; }
+
+        /* Success Modal */
+        .success-modal {
+            max-width: 380px;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        .success-icon {
+            font-size: 60px;
+            color: #4CAF7D;
+            margin-bottom: 15px;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arimo', sans-serif;
+        }
+
+        body {
+            background-color: #F5F0ED; /* Màu nền */
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR (THANH MENU LÊN TRÁI) --- */
+        .sidebar {
+            width: 260px;
+            background-color: #8B7167;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Đảm bảo sidebar cao hết màn hình */
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            padding: 25px 20px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            margin-right: 15px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .sidebar-divider {
+            border: 0;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Đã điều chỉnh CSS menu ở đây để hover và active tràn viền đẹp hơn */
+        .menu {
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Tự động chiếm lấy toàn bộ phần trống còn lại của sidebar */
+            padding: 10px 0; /* Khoảng cách đệm trên dưới */
+            justify-content: space-between; /* Đẩy các mục cách đều nhau từ trên xuống dưới */
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: background-color 0.2s;
+            /* Loại bỏ margin-bottom nếu có để space-between hoạt động chuẩn xác */
+            margin-bottom: 0; 
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Class hiển thị trạng thái đang chọn */
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Khung chứa icon */
+        .menu-icon {
+            width: 30px;   /* Giảm kích thước khung từ 24px xuống 20px */
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px; /* Tăng khoảng cách với chữ một chút cho thoáng */
+        }
+
+          /* Hình ảnh icon bên trong */
+          .menu-icon img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain; /* Đảm bảo icon không bị bóp méo */
+              display: block;
+          }
+
+        /* Tùy chỉnh icon SVG cho menu */
+        .menu-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: #5A463F; /* Nâu đậm */
+        }
+
+        /* --- MAIN CONTENT (NỘI DUNG CHÍNH) --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background-color: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .page-title {
+            color: #8B6F47; /* Màu chữ trang chủ */
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-right: 25px;
+            text-align: right;
+            color: #5B5B5B; /* Màu chữ Nhân viên / Tên */
+        }
+
+        .user-details {
+            margin-right: 12px;
+        }
+
+        .user-role {
+            font-size: 14px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 40px;
+            background-color: #E0E0E0;
+            margin-right: 25px;
+        }
+
+        .btn-logout {
+            background-color: #BFA19A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #a88c85;
+        }
+
+        /* DASHBOARD CONTENT */
+        .dashboard-body {
+            padding: 40px;
+        }
+
+        .welcome-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .greeting-small {
+            color: #BFA19A; /* Màu phụ */
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .greeting-large {
+            color: #8B7167; /* Màu Xin chào... */
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .greeting-date {
+            color: #BFA19A; /* Màu phụ */
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        .card-divider {
+            border: 0;
+            height: 1px;
+            background-color: #E5E5E5;
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+       <a href="Trang_Chu_QL.html" style="text-decoration: none; color: inherit;">
+          <div class="logo-section">
+              <img class="logo-circle" src="icon/logo.jpg" alt="">
+              <div class="logo-text">
+                  2000<br>Nails Eyelash
+              </div>
+          </div>
+        </a>
+
+        <hr class="sidebar-divider">
+        
+        <nav class="menu">
+            <a href="Quan_ly_DV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/1_Quanlydichvu.png" alt=""></div>
+                Quản lý dịch vụ
+            </a>
+            <a href="Quan_ly_NV.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/2_Quanlynhanvien.png" alt=""></div>
+                Quản lý nhân viên
+            </a>
+            <a href="Quan_ly_KH.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/3_Quanlykhachhang.png" alt=""></div>
+                Quản lý khách hàng
+            </a>
+            <a href="Quan_ly_dat_lich.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/4_Quanlydatlich.png" alt=""></div>
+                Quản lý đặt lịch
+            </a>
+            <a href="Quan_ly_KM.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/5_Quanlykhuyenmai.png" alt=""></div>
+                Quản lý khuyến mãi
+            </a>
+            <a href="Quan_Ly_Bao_Cao_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/6_Quanlybaocao.png" alt=""></div>
+                Quản lý báo cáo
+            </a>
+            <a href="Quan_Ly_Ca_Lam_QL.html" class="menu-item active">
+                <div class="menu-icon"><img src="icon/7_Quanlycalam.png" alt=""></div>
+                Quản lý ca làm
+            </a>
+            <a href="Quan_Ly_Tai_Khoan_Ca_Nhan_QL.html" class="menu-item">
+                <div class="menu-icon"><img src="icon/8. Quản lý tài khoản cá nhân.png" alt=""></div>
+                Quản lý tài khoản cá nhân
+            </a>
+        </nav>
+</aside>
+
+<main class="main">
+        <header class="header">
+            <h1 class="page-title">Trang chủ</h1>
+            
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-details" style="text-align: right;">
+                        <span class="user-role">Quản lý hệ thống</span>
+                        <span class="user-name">Thu Thuý</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=68" alt="Avatar" class="avatar">
+                </div>
+                
+                <div class="header-divider"></div>
+                
+                <button class="btn-logout" onclick="window.location.href='Dang_Nhap.html'">Đăng xuất</button>
+            </div>
+        </header>
+
+    <div class="content">
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên ca làm hoặc nhân viên..." onkeyup="filterTable()">
+            </div>
+            <button class="btn-create" onclick="openCreateModal()">＋ Tạo ca làm mới</button>
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <div>Ca làm</div>
+                <div>Nhân viên</div>
+                <div>Mã NV</div>
+                <div>Giờ bắt đầu</div>
+                <div>Giờ kết thúc</div>
+                <div>Thao tác</div>
+            </div>
+            <div id="tableBody"></div>
+        </div>
+    </div>
+</main>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Create Modal -->
+<div class="overlay" id="createOverlay">
+    <div class="modal">
+        <div class="modal-header">Tạo ca làm mới</div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Mã ca làm <span style="color:red">*</span></label>
+                    <input type="text" id="c_code" placeholder="Nhập mã ca làm">
+                </div>
+                <div class="form-group">
+                    <label>Tên ca làm <span style="color:red">*</span></label>
+                    <input type="text" id="c_name" placeholder="Ca sáng / Ca chiều...">
+                </div>
+                <div class="form-group">
+                    <label>Mã nhân viên <span style="color:red">*</span></label>
+                    <select id="c_staffId"><option value="">-- Chọn nhân viên --</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Tên nhân viên</label>
+                    <input type="text" id="c_staffName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Giờ bắt đầu <span style="color:red">*</span></label>
+                    <input type="time" id="c_start">
+                </div>
+                <div class="form-group">
+                    <label>Giờ kết thúc <span style="color:red">*</span></label>
+                    <input type="time" id="c_end">
+                </div>
+                <div class="form-group full">
+                    <label>Mô tả</label>
+                    <textarea id="c_desc" rows="3" placeholder="vd: Khách đặt ca làm vào sáng sớm"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick="closeModal('createOverlay')">Hủy</button>
+            <button class="btn btn-save" onclick="saveCreate()">Lưu ca làm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="overlay" id="editOverlay">
+    <div class="modal">
+        <div class="modal-header">Cập nhật ca làm</div>
+        <div class="modal-body">
+            <!-- Tương tự create, chỉ khác id -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Mã ca làm</label>
+                    <input type="text" id="e_code" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Tên ca làm <span style="color:red">*</span></label>
+                    <input type="text" id="e_name">
+                </div>
+                <div class="form-group">
+                    <label>Mã nhân viên</label>
+                    <select id="e_staffId"></select>
+                </div>
+                <div class="form-group">
+                    <label>Tên nhân viên</label>
+                    <input type="text" id="e_staffName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Giờ bắt đầu</label>
+                    <input type="time" id="e_start">
+                </div>
+                <div class="form-group">
+                    <label>Giờ kết thúc</label>
+                    <input type="time" id="e_end">
+                </div>
+                <div class="form-group full">
+                    <label>Mô tả</label>
+                    <textarea id="e_desc" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick="closeModal('editOverlay')">Hủy</button>
+            <button class="btn btn-save" onclick="saveEdit()">Lưu ca làm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="overlay" id="detailOverlay">
+    <div class="modal" style="max-width:620px;">
+        <div class="modal-header" id="detailHeader">Chi tiết ca làm</div>
+        <div class="modal-body" id="detailBody">
+            <!-- Nội dung sẽ được JS chèn vào -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-save" onclick="closeModal('detailOverlay')">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="overlay" id="successOverlay">
+    <div class="modal success-modal">
+        <div class="success-icon">✅</div>
+        <h2 id="successTitle" style="color:#4CAF7D; margin-bottom:8px;">Thành công!</h2>
+        <p id="successMsg">Tạo ca làm mới thành công.</p>
+        <button class="btn btn-save" style="margin-top:20px; width:100%;" onclick="closeModal('successOverlay')">Đóng</button>
+    </div>
+</div>
+
+<script>
+// Dữ liệu mẫu giống ảnh
+let shifts = [
+    { id:1, code:"CA-001", name:"Ca sáng", staff:"Trương Phi Yến", staffId:"NV001", start:"08:00", end:"12:00", desc:"Ca làm việc buổi sáng" },
+    { id:2, code:"CA-002", name:"Ca chiều", staff:"Nguyễn Ái Phi", staffId:"NV002", start:"13:00", end:"17:00", desc:"" },
+    { id:3, code:"CA-003", name:"Ca sáng", staff:"Lý Phương Nhã", staffId:"NV004", start:"08:00", end:"12:00", desc:"" },
+    { id:4, code:"CA-004", name:"Ca tối", staff:"Cao Tuyết Hi", staffId:"NV003", start:"18:00", end:"22:00", desc:"" }
+];
+
+let nextId = 5;
+let currentEditId = null;
+
+// Render bảng
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = data.map(s => `
+        <div class="table-row">
+            <div><strong>${s.code}</strong><br><small>${s.name}</small></div>
+            <div>${s.staff}</div>
+            <div>${s.staffId}</div>
+            <div>${s.start}</div>
+            <div>${s.end}</div>
+            <div>
+                <button class="action-btn" onclick="viewDetail(${s.id})" title="Xem chi tiết">👁️</button>
+                <button class="action-btn" onclick="openEditModal(${s.id})" title="Sửa">✏️</button>
+                <button class="action-btn" onclick="deleteShift(${s.id})" title="Xóa">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Tìm kiếm
+function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = shifts.filter(s => 
+        s.name.toLowerCase().includes(q) || 
+        s.staff.toLowerCase().includes(q) ||
+        s.code.toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+}
+
+// Mở modal tạo mới
+function openCreateModal() {
+    // Reset form
+    document.getElementById('c_code').value = '';
+    document.getElementById('c_name').value = '';
+    document.getElementById('c_start').value = '';
+    document.getElementById('c_end').value = '';
+    document.getElementById('c_desc').value = '';
+    document.getElementById('createOverlay').classList.add('active');
+}
+
+// Lưu tạo mới
+function saveCreate() {
+    const code = document.getElementById('c_code').value.trim();
+    const name = document.getElementById('c_name').value.trim();
+    const start = document.getElementById('c_start').value;
+    const end = document.getElementById('c_end').value;
+
+    if (!code || !name || !start || !end) {
+        alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
+        return;
+    }
+
+    shifts.push({
+        id: nextId++,
+        code: code,
+        name: name,
+        staff: "Nhân viên mới",     // Bạn có thể cải tiến sau bằng select thật
+        staffId: "NV00" + (shifts.length + 1),
+        start: start,
+        end: end,
+        desc: document.getElementById('c_desc').value
+    });
+
+    closeModal('createOverlay');
+    renderTable(shifts);
+    showSuccess("Tạo ca làm mới thành công.");
+}
+
+// Edit
+function openEditModal(id) {
+    currentEditId = id;
+    const shift = shifts.find(s => s.id === id);
+    if (!shift) return;
+
+    document.getElementById('e_code').value = shift.code;
+    document.getElementById('e_name').value = shift.name;
+    document.getElementById('e_start').value = shift.start;
+    document.getElementById('e_end').value = shift.end;
+    document.getElementById('e_desc').value = shift.desc || '';
+
+    document.getElementById('editOverlay').classList.add('active');
+}
+
+function saveEdit() {
+    const shift = shifts.find(s => s.id === currentEditId);
+    if (!shift) return;
+
+    shift.name = document.getElementById('e_name').value;
+    shift.start = document.getElementById('e_start').value;
+    shift.end = document.getElementById('e_end').value;
+    shift.desc = document.getElementById('e_desc').value;
+
+    closeModal('editOverlay');
+    renderTable(shifts);
+    showSuccess("Cập nhật ca làm thành công.");
+}
+
+// Xem chi tiết
+function viewDetail(id) {
+    const s = shifts.find(x => x.id === id);
+    if (!s) return;
+
+    document.getElementById('detailHeader').innerHTML = `Chi tiết ca làm - ${s.name}`;
+    document.getElementById('detailBody').innerHTML = `
+        <p><strong>Nhân viên:</strong> ${s.staff} | ${s.staffId}</p>
+        <p><strong>Thời gian:</strong> ${s.start} - ${s.end}</p>
+        <p><strong>Mô tả:</strong> ${s.desc || 'Không có mô tả'}</p>
+        <hr style="margin:20px 0;">
+        <p><em>Chi tiết dịch vụ sẽ được hiển thị ở đây (có thể mở rộng sau).</em></p>
+    `;
+    document.getElementById('detailOverlay').classList.add('active');
+}
+
+// Xóa
+function deleteShift(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa ca làm này?")) {
+        shifts = shifts.filter(s => s.id !== id);
+        renderTable(shifts);
+        showSuccess("Xóa ca làm thành công.");
+    }
+}
+
+// Success
+function showSuccess(msg) {
+    document.getElementById('successMsg').textContent = msg;
+    document.getElementById('successOverlay').classList.add('active');
+}
+
+// Đóng modal
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+// Khởi tạo
+renderTable(shifts);
+</script>
+</body>
+</html>
