@@ -14,11 +14,31 @@ class UserSerializer(serializers.ModelSerializer):
 
 # --- 2. SERIALIZER CHO DỊCH VỤ (Sử dụng trong Quản lý dịch vụ & Xem chi tiết) ---
 class ServiceSerializer(serializers.ModelSerializer):
+    reviews = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
-        fields = ['id', 'name', 'duration', 'price', 'description', 'image']
-        # Tương ứng với: Tên dịch vụ, Thời gian làm, Giá, Mô tả trong Xem.pdf
+        fields = ['id', 'name', 'duration', 'price', 'description', 'image', 'reviews']
 
+    def get_reviews(self, obj):
+        request = self.context.get('request')
+        bookings_with_reviews = obj.bookings.exclude(review__isnull=True).select_related('review', 'customer__user').order_by('-review__created_at')
+        result = []
+        for b in bookings_with_reviews:
+            r = b.review
+            img_url = None
+            if r.image:
+                img_url = r.image.url
+                if request:
+                    img_url = request.build_absolute_uri(img_url)
+            result.append({
+                "customer_name": b.customer.user.full_name or b.customer.user.username,
+                "rating": r.rating,
+                "comment": r.comment,
+                "image": img_url,
+                "created_at": r.created_at.strftime('%d/%m/%Y')
+            })
+        return result
 
 # --- 3. SERIALIZER CHO NHÂN VIÊN (Sử dụng trong Quản lý nhân viên) ---
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -131,23 +151,19 @@ class BookingCreateSerializer(serializers.ModelSerializer):
        model = Booking
        fields = ['service', 'employee', 'booking_date', 'start_time']
 
-
    def validate(self, data):
        service = data.get('service')
        employee = data.get('employee')
        booking_date = data.get('booking_date')
        start_time = data.get('start_time')
 
-
        if not all([service, employee, booking_date, start_time]):
            raise serializers.ValidationError("Thiếu thông tin đặt lịch.")
-
 
        # Tính toán end_time dự kiến dựa trên duration của dịch vụ
        from datetime import datetime, timedelta
        start_dt = datetime.combine(booking_date, start_time)
        end_time = (start_dt + timedelta(minutes=service.duration)).time()
-
 
        # Kiểm tra trùng lịch:
        # Một lịch mới trùng nếu: start_moi < end_cu AND end_moi > start_cu
