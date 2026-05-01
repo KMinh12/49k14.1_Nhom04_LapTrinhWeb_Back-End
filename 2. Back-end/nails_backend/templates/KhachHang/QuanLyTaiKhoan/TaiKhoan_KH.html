@@ -193,9 +193,9 @@
         <label class="label-text">Giới tính</label>
         <select name="gender" class="input-field">
           <option value="">-- Chọn giới tính --</option>
-          <option value="M" {% if user.gender =='M' %}selected{% endif %}>Nam</option>
-          <option value="F" {% if user.gender =='F' %}selected{% endif %}>Nữ</option>
-          <option value="O" {% if user.gender =='O' %}selected{% endif %}>Khác</option>
+          <option value="M" {% if user.gender == 'M' %}selected{% endif %}>Nam</option>
+          <option value="F" {% if user.gender == 'F' %}selected{% endif %}>Nữ</option>
+          <option value="O" {% if user.gender == 'O' %}selected{% endif %}>Khác</option>
         </select>
       </div>
 
